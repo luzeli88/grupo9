@@ -29,3 +29,20 @@ Route::get('/catalogo', function () {
 Route::get('/consultas', function () {
     return view('consultas');
 });
+Route::get('/carrito', function () {
+    return view('carrito');
+});
+Route::get('/hombre', function () {
+    return "Sección Hombre";
+});
+
+Route::get('/mujer', function () {
+    return "Sección Mujer";
+});
+Route::get('/hombre', function () {
+    return view('hombre');
+});
+
+Route::get('/mujer', function () {
+    return view('mujer');
+});
