@@ -1,0 +1,39 @@
+body {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Logo */
+.logo {
+    width: 40px;
+    margin-right: 10px;
+}
+
+/* Banner */
+.banner {
+    padding: 60px;
+    background: #111;
+    color: white;
+}
+
+/* Cards */
+.producto-card {
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+.producto-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+.carrusel-chico {
+    max-width: 800px;
+    margin: 40px auto;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    height: 350px;
+    object-fit: cover;
+}

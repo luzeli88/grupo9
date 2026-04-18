@@ -1,7 +1,6 @@
-@extends('plantilla-base')
 
-@section('contenido')
-
+@extends('plantilla')
+@section('content')
 <h1>Consultas</h1>
 
 <form>
