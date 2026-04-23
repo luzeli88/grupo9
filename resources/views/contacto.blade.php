@@ -1,9 +1,14 @@
+
 @extends('plantilla')
 @section('content')
+<h1>Consultas</h1>
 
-<div style="text-align:center; font-family:Arial; padding-top:100px;">
-  <h1> Próximamente</h1>
-  <p>Estamos trabajando en el sistema de contactos</p>
-</div>
+<form action ="/contacto” method="POST"> 
+  @csrf
+  <input type="text" name="nombre" placeholder="Nombre">
+  <input type="email" name="email" placeholder="Email">
+  <textareaname="mensaje" class="form-control" rows="3"></textarea>
+  <button type="submit">Enviar</button>
+</form>
 
 @endsection

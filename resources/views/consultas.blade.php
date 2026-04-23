@@ -3,7 +3,7 @@
 @section('content')
 <h1>Consultas</h1>
 
-<form>
+<formaction="" method="POST">
     <div class="mb-3">
         <label>Nombre</label>
         <input type="text" class="form-control">
