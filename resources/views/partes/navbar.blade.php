@@ -43,11 +43,11 @@
                     </ul>                                                       
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('carrito') }}">🛒</a>
+                    <a class="nav-link" href="{{ route('construccion') }}">🛒</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">👤</a>
+                    <a class="nav-link" href="{{ route('construccion') }}">👤</a>
                 </li>
 
             </ul>

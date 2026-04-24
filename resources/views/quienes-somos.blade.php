@@ -3,7 +3,7 @@
 
 <div class="contenedor">
 
-  <h1>👟 Quiénes somos</h1>
+  <h1>Quiénes somos</h1>
 
   <p>
     En <strong>Step & Style</strong> nos dedicamos a ofrecer calzado de calidad,
@@ -19,5 +19,12 @@
   </p>
 
 </div>
+   <h2>Integrantes de la empresa</h2>
 
+    <ul class="lista-integrantes">
+        <li>Andrea Francini - Gerente General</li>
+        <li>Nombre Integrante 2 - Marketing</li>
+        <li>Nombre Integrante 3 - Atención al Cliente</li>
+        <li>Nombre Integrante 4 - Ventas Online</li>
+    </ul>
 @endsection
