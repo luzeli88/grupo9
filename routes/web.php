@@ -18,6 +18,9 @@ Route::get('/contacto', function () {
     return view('contacto');
 })->name('contacto');
 
+// public function procesar(Request $request) 
+// { return view('exito'); }
+
 Route::post('/contacto', [ContactoController::class, 'procesar']);
 
 Route::get('/terminos', function () {

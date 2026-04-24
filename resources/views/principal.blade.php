@@ -1,6 +1,7 @@
 @extends('plantilla')
 
 @section('content')
+<div class="container-fluid px-4">
 <div id="carouselExampleIndicators" class="carousel slide">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -28,37 +29,24 @@
   </button>
 </div>
 
-<!-- <div class="fade-in">
-<div class="container">
-    <div id="carouselExample" class="carousel slide carrusel-pro" data-bs-ride="carousel">
-
-        <div class="carousel-inner">
-
-            <div class="carousel-item active">
-                <img src="{{ asset('img/aryna_1_.webp') }}">
-            </div>
-
-            <div class="carousel-item">
-                <img src="{{ asset('img/ascaril_14.webp') }}">
-            </div>
-
-        </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-
-    </div>
-</div>
-</div> -->
 
 
 <!-- PRODUCTOS -->
-<div class="row text-center g-4 mt-3">
+    @php
+    $productos = [
+        ['nombre' => 'Zapatillas', 'precio' => 20000, 'imagen' => 'img/leia_35_cho-.webp'],
+        ['nombre' => 'Zapatos', 'precio' => 35000, 'imagen' => 'img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp'],
+        ['nombre' => 'Botas', 'precio' => 40000, 'imagen' => 'img/leia_38.webp'],
+        ['nombre' => 'Zapatillas', 'precio' => 20000, 'imagen' => 'img/leia_35_cho-.webp'],
+        ['nombre' => 'Zapatos', 'precio' => 35000, 'imagen' => 'img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp'],
+        ['nombre' => 'Botas', 'precio' => 40000, 'imagen' => 'img/leia_38.webp'],
+    ];
+    @endphp
+
+    @include('partials.productos', ['productos' => $productos])
+
+</div>
+<!-- <div class="row text-center g-4 mt-3">
 
     <div class="col-md-4">
         <div class="card producto-card">
@@ -152,6 +140,6 @@
         </div>
     </div>
 
-</div>
+</div> -->
 
 @endsection

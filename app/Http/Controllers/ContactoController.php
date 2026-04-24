@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 class ContactoController extends Controller
 {
     public function procesar(Request $request) 
-    { $nombre = $request->input('nombre');
+    { 
+    $nombre = $request->input('nombre');
     $email = $request->input('email'); 
     $mensaje = $request->input('mensaje'); 
     return view('exito', compact('nombre', 'email', 'mensaje')); }

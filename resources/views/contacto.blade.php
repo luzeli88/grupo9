@@ -3,7 +3,7 @@
 @section('content')
 <h1>Consultas</h1>
 
-<form action ="/contacto” method="POST"> 
+<form action="{{ url('/contacto') }}" method="POST">> 
   @csrf
   <input type="text" name="nombre" placeholder="Nombre">
   <input type="email" name="email" placeholder="Email">
