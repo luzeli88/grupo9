@@ -1,5 +1,7 @@
 <?php
 
+// Importamos el controlador para manejar el formulario de consultas.
+use App\Http\Controllers\ConsultasController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,16 +22,17 @@ Route::get('/contacto', function () {
 
 // public function procesar(Request $request) 
 // { return view('exito'); }
+Route::get('/consultas', function () {
+    return view('consultas');
+})->name('consultas');
 
-Route::post('/contacto', [ContactoController::class, 'procesar']);
+// La ruta POST envía los datos del formulario a ConsultasController@procesar.
+Route::post('/consultas', [ConsultasController::class, 'procesar']);
 
 Route::get('/terminos', function () {
     return view('terminos');
 })->name('terminos');
 
-Route::get('/consultas', function () {
-    return view('consultas');
-})->name('consultas');
 Route::get('/carrito', function () {
     return view('carrito');
 })->name('carrito');
@@ -57,3 +60,12 @@ Route::get('/envio', function () {
 Route::get('/pago', function () {
     return view('pago');
 })->name('pago');
+
+Route::get('/construccion', function () {
+    return view('construccion');
+})->name('construccion');
+
+// Route::post('/consultas-enviar', function () {
+//     return redirect()->route('construccion');
+// })->name('consultas.enviar');
+

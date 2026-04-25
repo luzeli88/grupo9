@@ -2,21 +2,26 @@
 
 @section('content')
 <div class="container-fluid px-4">
-<div id="carouselExampleIndicators" class="carousel slide">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
+<div class="promo mb-4">
+    <p class="mb-0 fs-5"><i class="bi bi-fire-fill"></i> No te pierdas los mejores descuentos  en calzado y envíos rápidos.</p>
+</div>
+<div class="full-width-section">
+    <div class="carrusel-pro">
+        <div id="carouselExampleIndicators" class="carousel slide">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="{{ asset('img/aryna_1_.webp') }}" class="d-block w-100" alt="Aryna 1.webp">
+      <img src="{{ asset('img/descuento3.png') }}" class="d-block w-100" alt="descuento3.png">
     </div>
     <div class="carousel-item">
-      <img src="{{ asset('img/kat_10.webp') }}" class="d-block w-100" alt="Kat 10.webp">
+      <img src="{{ asset('img/descuento2.png') }}" class="d-block w-100" alt="descuento2.png">
     </div>
     <div class="carousel-item">
-      <img src="{{ asset('img/leia_38.webp') }}" class="d-block w-100" alt="Leia 38.webp">
+      <img src="{{ asset('img/logo.png') }}" class="d-block w-100" alt="logo.png">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -28,118 +33,30 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+    </div>
 
+    <div class="promo mb-4">
+        <p class="mb-0 fs-5"><i class="bi bi-lightning-charge-fill"></i> Estas promociones vuelan: descubrí las mejores ofertas antes de que se agoten.</p>
+    </div>
 
+    <div class="full-width-section productos-full">
 
 <!-- PRODUCTOS -->
     @php
     $productos = [
-        ['nombre' => 'Zapatillas', 'precio' => 20000, 'imagen' => 'img/leia_35_cho-.webp'],
-        ['nombre' => 'Zapatos', 'precio' => 35000, 'imagen' => 'img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp'],
-        ['nombre' => 'Botas', 'precio' => 40000, 'imagen' => 'img/leia_38.webp'],
-        ['nombre' => 'Zapatillas', 'precio' => 20000, 'imagen' => 'img/leia_35_cho-.webp'],
-        ['nombre' => 'Zapatos', 'precio' => 35000, 'imagen' => 'img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp'],
-        ['nombre' => 'Botas', 'precio' => 40000, 'imagen' => 'img/leia_38.webp'],
+        ['id'=>1,'nombre'=>'Bota','precio'=>55000,'imagen'=>'img/bota2.webp'],
+        ['id'=>2,'nombre'=>'Zapato','precio'=>40000,'imagen'=>'img/zapato3.webp'],
+        ['id'=>3,'nombre'=>'Bota','precio'=>40000,'imagen'=>'img/bota8.webp'],
+        ['id'=>4,'nombre'=>'Zapato','precio'=>20000,'imagen'=>'img/zapato1.webp'],
+        ['id'=>5,'nombre'=>'Zapato','precio'=>40000,'imagen'=>'img/zapato6.webp'],
+        ['id'=>6,'nombre'=>'Zapato','precio'=>40000,'imagen'=>'img/zapato8.webp'],
+        ['id'=>7,'nombre'=>'Zapato','precio'=>20000,'imagen'=>'img/zapato4.webp'],
+        ['id'=>8,'nombre'=>'Zapato','precio'=>35000,'imagen'=>'img/zapato9.webp'],
     ];
     @endphp
 
     @include('partials.productos', ['productos' => $productos])
 
+    </div>
 </div>
-<!-- <div class="row text-center g-4 mt-3">
-
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/leia_35_cho-.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatillas</h5>
-                <p>$20.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card producto-card">
-            <img src="{{ asset('img/nimra_1_neg-463cbd3a2898fb797417761915838877-1024-1024.webp') }}" class="card-img-top">
-            <div class="card-body">
-                <h5>Zapatos</h5>
-                <p>$35.000</p>
-                <button class="btn btn-dark">Comprar</button>
-            </div>
-        </div>
-    </div>
-
-</div> -->
-
 @endsection

@@ -43,11 +43,15 @@
                     </ul>                                                       
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('carrito') }}">🛒</a>
+                    <a class="nav-link nav-icon" href="{{ route('construccion') }}" aria-label="Carrito">
+                        <i class="bi bi-cart3"></i>
+                    </a>
                 </li>
-
+                
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">👤</a>
+                    <a class="nav-link nav-icon" href="{{ route('construccion') }}" aria-label="Perfil">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
                 </li>
 
             </ul>
