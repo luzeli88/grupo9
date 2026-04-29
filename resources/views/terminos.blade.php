@@ -187,8 +187,8 @@ Las modificaciones regirán desde su publicación.
 Para consultas, reclamos o solicitudes vinculadas a compras:
 
 📩 Email: contacto@stepandstyle.com <br>
-📱 WhatsApp: +54 9 XXX XXX XXXX <br>
-📍 Corrientes, Argentinan.
+📱 WhatsApp: +54 9 11 1234-5678 <br>
+📍 Av. Sta. Fe 438, Palermo, Ciudad de Buenos Aires
 </p>
 </section>
 
