@@ -138,7 +138,7 @@ body::before {
 .carousel-item img,
 .carrusel-pro .carousel-item img {
     width: 100%;
-    height: auto; /* Cambiado de 350px a auto para mantener la relación de aspecto de la imagen en cualquier tamaño de pantalla */
+    height: auto; /* Mantene la relación de aspecto de la imagen en cualquier tamaño de pantalla */
     object-fit: cover;
 }
 
@@ -366,7 +366,56 @@ body::before {
 }
 
 /* ============================= */
-/* 🚚 ENVÍO */
+/* � TÉRMINOS Y CONDICIONES */
+/* ============================= */
+.terminos-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.terminos-section h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.terminos-section p {
+    text-align: justify;
+    text-align-last: left;
+    margin-bottom: 1rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+.terminos-section ul {
+    margin: 0 0 1rem 1.4rem;
+    padding-left: 0;
+}
+
+.terminos-section li {
+    margin-bottom: 0.55rem;
+    text-align: justify;
+}
+
+.terminos-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.terminos-list li {
+    margin-bottom: 0.5rem;
+}
+
+.terminos-list li::before {
+    content: "•";
+    color: #2d6bed;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* ============================= */
+/* �🚚 ENVÍO */
 /* ============================= */
 .envio-card {
     background: rgba(255, 255, 255, 0.9);

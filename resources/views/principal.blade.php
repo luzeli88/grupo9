@@ -16,13 +16,13 @@
             </div>
             <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="{{ asset('img/descuento3.png') }}" class="d-block w-100 img-fluid" alt="descuento3.png">
+      <img src="{{ asset('img/Carrusel1.png') }}" class="d-block w-100 img-fluid" alt="Carrusel1.png">
     </div>
     <div class="carousel-item">
-      <img src="{{ asset('img/descuento1.png') }}" class="d-block w-100 img-fluid" alt="descuento1.png">
-    </div>
+      <img src="{{ asset('img/Carrusel2.png') }}" class="d-block w-100 img-fluid" alt="Carrusel2.png">
+    </div>  
     <div class="carousel-item">
-      <img src="{{ asset('img/logo.png') }}" class="d-block w-100 img-fluid" alt="logo.png">
+      <img src="{{ asset('img/Carrusel3.png') }}" class="d-block w-100 img-fluid" alt="Carrusel3.png">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

@@ -15,18 +15,18 @@
                     <a class="nav-link" href="/">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('quienes') }}">Quienes somos</a>
+                    <a class="nav-link" href="{{ route('quienes') }}">Quiénes somos</a>
                 </li>
-                <li class="nav-item">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"#" role="button" data-bs-toggle="dropdown">
-                        Comercializacion
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Comercialización
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('envio') }}">Medios de Envios</a></li>
-                        <li><a class="dropdown-item" href="{{ route('pago') }}">Formas de Pago</a></li>
-                    </ul> 
+                        <li><a class="dropdown-item" href="{{ route('envio') }}">Medios de envíos</a></li>
+                        <li><a class="dropdown-item" href="{{ route('pago') }}">Formas de pago</a></li>
+                    </ul>
                 </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('consultas') }}">Consultas</a>
                 </li>
                 <li class="nav-item">
