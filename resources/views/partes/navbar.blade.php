@@ -48,15 +48,33 @@
                     </a>
                 </li>
                 
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-icon dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
-                        <li><a class="dropdown-item" href="{{ route('login') }}">Iniciar sesión</a></li>
-                        <li><a class="dropdown-item" href="{{ route('registro') }}">Registro</a></li>
-                    </ul>
-                </li>
+                @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
+                            <li class="dropdown-item-text">Hola, {{ auth()->user()->nombre ?? auth()->user()->name }}</li>
+                            <li><hr class="dropdown-divider"></li>
+                            @if(auth()->user()->rol?->nombre === 'admin')
+                                <li><a class="dropdown-item" href="{{ route('admin') }}">Panel Admin</a></li>
+                            @else
+                                <li><a class="dropdown-item" href="{{ route('cliente') }}">Mi panel</a></li>
+                            @endif
+                            <li><a class="dropdown-item" href="{{ route('logout') }}">Cerrar sesión</a></li>
+                        </ul>
+                    </li>
+                @else
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
+                            <li><a class="dropdown-item" href="{{ route('login') }}">Iniciar sesión</a></li>
+                            <li><a class="dropdown-item" href="{{ route('registro') }}">Registro</a></li>
+                        </ul>
+                    </li>
+                @endauth
 
             </ul>
         </div>

@@ -3,6 +3,7 @@
 // Importamos el controlador para manejar el formulario de consultas.
 use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,22 +49,40 @@ Route::get('/producto-zapatos', function () {
     return view('producto-zapatos');
 })->name('zapatos');
 
-// Rutas de autenticación (formularios)
+// Paso 4: Rutas de autenticación - formularios
+// Estas rutas muestran los formularios de registro y login.
 Route::get('/registro', [AuthController::class, 'formularioRegistro'])->name('registro');
 Route::get('/login', [AuthController::class, 'formularioLogin'])->name('login');
 
-// Rutas de procesamiento de formularios de autenticación
+// Paso 5: Rutas de autenticación - procesamiento
+// Estas rutas reciben los datos del formulario y ejecutan la lógica de registro/login.
 Route::post('/registrar', [AuthController::class, 'registrar'])->name('registrar');
 Route::post('/autenticar', [AuthController::class, 'autenticar'])->name('autenticar');
 
 // Rutas de destino después del login
 Route::get('/admin', function () {
-    return 'Panel de administración (ruta activa).';
+    // Protege la ruta: el usuario debe estar autenticado y ser admin.
+    if (!Auth::check()) {
+        return redirect('/login');
+    }
+
+    if (Auth::user()->rol?->nombre !== 'admin') {
+        return redirect('/cliente');
+    }
+
+    return view('backend.admin.dashboard');
 })->name('admin');
 
 Route::get('/cliente', function () {
-    return 'Panel del cliente (ruta activa).';
+    // Protege la ruta: el usuario debe estar autenticado.
+    if (!Auth::check()) {
+        return redirect('/login');
+    }
+
+    return view('backend.usuarios.cliente');
 })->name('cliente');
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/envio', function () {
     return view('envio');
