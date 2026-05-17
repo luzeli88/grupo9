@@ -1,29 +1,49 @@
 /* ============================= */
-/* 🎯 RESET */
+/* 🎯 RESET (Reinicio de Estilos)*/
 /* ============================= */
 * {
+    /* 
+       'margin: 0' y 'padding: 0' eliminan los espacios extra que 
+       algunos navegadores agregan por defecto alrededor de los elementos.
+    */
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* asegura que el tamaño total de un elemento (width/height) 
+       incluya el relleno (padding) */
 }
 
 /* ============================= */
 /* 🌈 BODY */
 /* ============================= */
 body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #fff8dc, #fff3b0);
+    font-family:
+        "Poppins", sans-serif; /* dos funtes que se usan en todo el cuerpo de la pagina*/
+    background: linear-gradient(
+        135deg,
+        #fff8dc,
+        #fff3b0
+    ); /* Crea un fondo degradado en diagonal (135 grados). Va desde un color crema (#fff8dc) hacia un amarillo suave (#fff3b0).
+    */
 }
 
-/* textura sutil */
+/* textura sutil (efecto hecho con IA) */
 body::before {
-    content: "";
-    position: fixed;
+    content: ""; /* es para que el pseudoelemento exista. Aunque esté vacío, permite que se renderice visualmente.*/
+    position: fixed; /* asegura que la textura cubra toda la pantalla y se quede quieta aunque el usuario haga scroll.    */
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-    background-size: 20px 20px;
-    pointer-events: none;
+    background-image: radial-gradient(
+        rgba(0, 0, 0, 0.04) 1px,
+        transparent 1px
+    ); /* 'radial-gradient' crea un punto minúsculo (1px) de color negro muy suave 
+       (4% de opacidad) y el resto lo deja transparente.
+    */
+    background-size: 20px 20px; /* 'background-size' define la separación de los puntos. 
+       Aquí crea una cuadrícula de 20px por 20px donde se repite cada punto.
+    */
+    pointer-events: none; /* hace que la capa sea "invisible" a los clics. 
+       Sin esto, no podrías hacer clic en los botones o enlaces que estén debajo.
+    */
 }
 
 /* ============================= */
@@ -31,25 +51,27 @@ body::before {
 /* ============================= */
 .navbar {
     background: black !important;
-    padding: 8px 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 8px /*espacio vertical*/ 20px; /*espacio horizontal*/
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /*añade una sombra para dar efecto de elevación. */
 }
 
 /* LOGO */
 .logo-navbar {
-    height: 68px;
-    width: auto;
-    max-width: 240px;
-    display: block;
+    height: 68px; /*altura del logo en el navbar*/
+    width: auto; /*calcule el ancho automáticamente basándose en la altura, para que la imagen NO se deforme */
+    max-width: 240px; /*util para pantallas pequeñas*/
+    display: block; /*display: block', esto centra el logo horizontalmente dentro de su contenedor, ya que los elementos 'img' son 'inline' por defecto y no responden a 'margin: auto'. */
     margin: 0 auto;
-    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.08));
+    filter: drop-shadow(
+        0 1px 4px rgba(0, 0, 0, 0.08)
+    ); /*'drop-shadow' detecta la forma real del logo  y le aplica la sombra solo a la silueta.*/
 }
 
 /* HEADER */
 .site-header {
-    background: transparent;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.06);
+    background: transparent; /* 'background: transparent' hace que el fondo del header sea invisible, para usar el del body*/
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08); /*borde inferior*/
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.06); /*añade una sombra ligera hacia abajo, efecto de elevacion*/
 }
 
 .logo-navbar {
@@ -63,25 +85,30 @@ body::before {
 /* LINKS */
 .navbar .nav-link {
     color: white !important;
-    font-weight: 500;
-    margin: 0 6px;
-    padding: 8px 16px;
-    border-radius: 12px;
-    transition: 0.3s;
+    font-weight: 500; /*Define el grosor de la letra.*/
+    margin: 0 6px; /*Define el espacio horizontal (6px) entre los enlaces del navbar y 0 vertical*/
+    padding: 8px 16px; /*Define el espacio interno de los enlaces: 8px arriba y abajo, 16px a los lados, para que sean más fáciles de clicar y tengan un aspecto más "botón".*/
+    border-radius: 12px; /*Agrega bordes redondeados a los enlaces para darles un aspecto más suave y moderno.*/
+    transition: 0.3s; /*Agrega una transición suave de 0.3 segundos para cualquier cambio en el enlace, como el fondo o el color, lo que mejora la experiencia visual al interactuar con los enlaces.*/
 }
 
 .navbar {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12); /*Agrega un borde inferior sutil al navbar para darle un poco de definición y separación del contenido que viene debajo, usando un color blanco con baja opacidad para mantener el contraste sin ser demasiado fuerte.*/
 }
 
-/* Iconos del navbar con mayor contraste */
+/* Iconos (circulares) del navbar con mayor contraste */
 .navbar .nav-link.nav-icon {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(
+        255,
+        255,
+        255,
+        0.15
+    ); /*Agrega un fondo semitransparente al icono para mejorar el contraste con el fondo del navbar. */
     color: white !important;
     border-radius: 50%;
     width: 2.4rem;
     height: 2.4rem;
-    display: inline-flex;
+    display: inline-flex; /* 'inline-flex' permite que el icono se comporte como un elemento en línea (para que no ocupe toda la línea) pero también le da las capacidades de flexbox para centrar el contenido dentro de él. */
     align-items: center;
     justify-content: center;
     padding: 0;
@@ -187,7 +214,9 @@ body::before {
 }
 
 .img-container:hover img {
-    transform: scale(1.05);
+    transform: scale(
+        1.05
+    ); /*Hace que la imagen se agrande ligeramente (5%) al pasar el mouse por encima, creando un efecto de zoom suave que atrae la atención del usuario hacia el producto. */
 }
 
 /* BOTÓN HOVER */
@@ -214,7 +243,7 @@ body::before {
 
 .precio {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: bold; /*Hace que el precio sea más destacado visualmente, lo que es importante para captar la atención del cliente. */
 }
 
 /* COLORES */
@@ -255,13 +284,13 @@ body::before {
 }
 
 .promo p {
-    font-size: 1.15rem;
-    font-weight: 700;
+    font-size: 1.15rem; /* Define un tamaño de fuente ligeramente más grande para destacar el texto de la promoción. */
+    font-weight: 700; /* Hace que el texto sea más grueso y llamativo, ideal para promociones. */
     margin: 0;
 }
 
 .promo i {
-    margin-right: 0.6rem;
+    margin-right: 0.6rem; /* Agrega un espacio a la derecha del icono para separar visualmente el icono del texto. */
     color: #d05f25;
 }
 

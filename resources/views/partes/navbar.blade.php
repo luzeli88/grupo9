@@ -33,7 +33,7 @@
                     <a class="nav-link" href="{{ route('contacto') }}">Contacto</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"#" role="button" data-bs-toggle="dropdown" >
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Productos
                     </a>
                     <ul class="dropdown-menu">
@@ -48,10 +48,14 @@
                     </a>
                 </li>
                 
-                <li class="nav-item">
-                    <a class="nav-link nav-icon" href="{{ route('construccion') }}" aria-label="Perfil">
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-icon dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-circle"></i>
                     </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
+                        <li><a class="dropdown-item" href="{{ route('login') }}">Iniciar sesión</a></li>
+                        <li><a class="dropdown-item" href="{{ route('registro') }}">Registro</a></li>
+                    </ul>
                 </li>
 
             </ul>

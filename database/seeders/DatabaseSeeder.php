@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Rol;
+use App\Models\Usuario;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,14 +13,26 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Seed the application's database.
+     *
+     * Este archivo es el seeder principal. Laravel ejecuta este seeder
+     * cuando llamas a `php artisan db:seed` o `php artisan migrate:fresh --seed`.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Llamamos al RolesSeeder para crear los roles necesarios.
+        $this->call(RolesSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Creamos un usuario administrador de ejemplo.
+        // firstOrCreate evita que se cree otra vez si el mismo email ya existe.
+        Usuario::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'nombre' => 'Administrador',
+                // El password se guarda como texto plano aquí solo para ejemplo,
+                // el modelo Usuario debe aplicar el hash automáticamente.
+                'password' => 'password',
+                'rol_id' => Rol::where('nombre', 'admin')->first()->id,
+            ]
+        );
     }
 }
