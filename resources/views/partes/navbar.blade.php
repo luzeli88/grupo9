@@ -1,3 +1,5 @@
+@auth
+@endauth
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     
     <div class="container">
@@ -50,9 +52,20 @@
                 
                 @auth
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-icon dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle"></i>
-                        </a>
+                       <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-white"
+   href="#"
+   id="perfilDropdown"
+   role="button"
+   data-bs-toggle="dropdown"
+   aria-expanded="false">
+
+    <i class="bi bi-person-circle fs-5"></i>
+
+    <span class="nombre-usuario">
+        {{ auth()->user()?->nombre ?? auth()->user()?->name }}
+    </span>
+
+</a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
                             <li class="dropdown-item-text">Hola, {{ auth()->user()->nombre ?? auth()->user()->name }}</li>
                             <li><hr class="dropdown-divider"></li>
@@ -66,9 +79,17 @@
                     </li>
                 @else
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-icon dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle"></i>
-                        </a>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+   href="#"
+   id="perfilDropdown"
+   role="button"
+   data-bs-toggle="dropdown"
+   aria-expanded="false">
+
+    <i class="bi bi-person-circle"></i>
+
+    
+</a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
                             <li><a class="dropdown-item" href="{{ route('login') }}">Iniciar sesión</a></li>
                             <li><a class="dropdown-item" href="{{ route('registro') }}">Registro</a></li>

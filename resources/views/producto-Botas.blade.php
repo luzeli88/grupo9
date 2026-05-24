@@ -1,20 +1,40 @@
 @extends('plantilla')
+
 @section('content')
-<h1 class="text-center mb-4">👞 Botas</h1>
 
- @php
-    $productos = [
+<h1 class="text-center mb-4">👢 Botas</h1>
 
-        ['id'=>1,'nombre'=>'Bota','precio'=>60000,'imagen'=>'img/bota1.webp'],
-        ['id'=>2,'nombre'=>'Bota','precio'=>55000,'imagen'=>'img/bota2.webp'],
-        ['id'=>3,'nombre'=>'Bota','precio'=>40000,'imagen'=>'img/bota3.webp'],
-        ['id'=>4,'nombre'=>'Bota','precio'=>30000,'imagen'=>'img/bota4.webp'],
-        ['id'=>5,'nombre'=>'Bota','precio'=>35000,'imagen'=>'img/bota5.webp'],
-        ['id'=>6,'nombre'=>'Bota','precio'=>40000,'imagen'=>'img/bota6.webp'],
-        ['id'=>7,'nombre'=>'Bota','precio'=>40000,'imagen'=>'img/bota8.webp'],
-        ['id'=>8,'nombre'=>'Bota','precio'=>35000,'imagen'=>'img/bota9.webp'],
-        ['id'=>9,'nombre'=>'Bota','precio'=>50000,'imagen'=>'img/bota10.webp'],
-    ];
-    @endphp
-@include('partials.productos', ['productos' => $productos])
-@endsection 
+@if(session('mensaje'))
+    <div class="alert alert-success text-center">{{ session('mensaje') }}</div>
+@endif
+
+<div class="row g-4 px-4">
+    @forelse($productos as $producto)
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            @if($producto->imagen)
+                <img src="{{ asset('storage/' . $producto->imagen) }}" class="card-img-top" style="height:250px; object-fit:cover;">
+            @else
+                <img src="{{ asset('img/bota1.webp') }}" class="card-img-top" style="height:250px; object-fit:cover;">
+            @endif
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ $producto->nombre }}</h5>
+                <p class="card-text">${{ number_format($producto->precio_venta, 0, ',', '.') }}</p>
+
+                @auth
+                    <form action="{{ route('carrito.agregar', $producto->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-dark w-100">🛒 Comprar</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-dark w-100">Iniciar sesión para comprar</a>
+                @endauth
+            </div>
+        </div>
+    </div>
+    @empty
+        <p class="text-center">No hay botas disponibles por el momento.</p>
+    @endforelse
+</div>
+
+@endsection

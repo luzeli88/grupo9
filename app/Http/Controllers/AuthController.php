@@ -19,6 +19,7 @@ class AuthController extends Controller
     }
 
     public function registrar(Request $request){
+        
 
         // Validación
         $validated = $request->validate([
@@ -42,9 +43,13 @@ class AuthController extends Controller
             'nombre' => $fullName,
             'email' => $validated['email'],
             'password' => $validated['password'],
+            'telefono'  => $request->telefono,
+            'direccion' => $request->direccion,
+            'ciudad'    => $request->ciudad,
             'rol_id' => $rol->id,
         ]);
-
+Auth::logout(); // No lo logueamos automáticamente
+return redirect('/login')->with('success', 'Registro exitoso. ¡Bienvenido, ' . $validated['nombre'] . '! Iniciá sesión.');
         // Loguear automáticamente al usuario recién registrado
         Auth::login($usuario);
 
@@ -65,7 +70,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             if (Auth::user()->rol?->nombre === 'admin') {
-                return redirect('/admin'); // Redirige al admin después del login exitoso
+                return redirect()->route('admin');// Redirige al admin después del login exitoso
             }
 
             return redirect('/cliente'); // Redirige al cliente después del login exitoso
@@ -83,7 +88,7 @@ class AuthController extends Controller
         $request->session()->invalidate();// Invalida la sesión actual
         $request->session()->regenerateToken();// Regenera el token CSRF para evitar ataques de falsificación de solicitudes
 
-        return redirect('/'); // Redirige a la página de inicio después del logout
+        return redirect('/login'); // Redirige a la página de inicio después del logout
     }
 
 }

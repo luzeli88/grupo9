@@ -25,12 +25,12 @@ class DatabaseSeeder extends Seeder
         // Creamos un usuario administrador de ejemplo.
         // firstOrCreate evita que se cree otra vez si el mismo email ya existe.
         Usuario::firstOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => 'anfran06@gmail.com'],
             [
                 'nombre' => 'Administrador',
                 // El password se guarda como texto plano aquí solo para ejemplo,
                 // el modelo Usuario debe aplicar el hash automáticamente.
-                'password' => 'password',
+                'password' => '123456',
                 'rol_id' => Rol::where('nombre', 'admin')->first()->id,
             ]
         );

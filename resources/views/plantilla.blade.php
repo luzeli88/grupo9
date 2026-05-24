@@ -1,4 +1,21 @@
-<!DOCTYPE html>
+
+@include('partes.navbar')
+
+ <!-- flex-grow-1 permite que el contenido se expanda para llenar el espacio disponible -->
+<main class="flex-grow-1 container mt-4">
+    @yield('content')
+</main>
+
+@include('partes.header')
+<main class="container my-4">
+    @yield('contenido')
+</main>
+@include('partes.footer')
+
+<script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+</body>
+</html><!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -16,19 +33,4 @@
 <!-- d-flex flex-column organiza los elementos (header,contenido y footer) en columna -->
 
 <body class="d-flex flex-column min-vh-100">
-
-@include('partes.header')
-@include('partes.navbar')
-
- <!-- flex-grow-1 permite que el contenido se expanda para llenar el espacio disponible -->
-<main class="flex-grow-1 container mt-4">
-    @yield('content')
-</main>
-
-@include('partes.footer')
-
-<script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-</body>
-</html>
 

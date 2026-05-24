@@ -689,3 +689,29 @@ h2 {
         height: 180px;
     }
 }
+.nombre-usuario {
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.navbar .dropdown-toggle::after {
+    margin-left: 8px;
+}
+/* Usuario logueado en navbar */
+.usuario-navbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white !important;
+    white-space: nowrap;
+    padding: 8px 12px !important;
+}
+
+.usuario-navbar i {
+    font-size: 1.3rem;
+}
+
+.nombre-usuario {
+    font-size: 15px;
+    white-space: nowrap;
+}

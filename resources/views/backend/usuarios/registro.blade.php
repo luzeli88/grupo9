@@ -36,13 +36,28 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" value="{{ old('telefono') }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirección" value="{{ old('direccion') }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ciudad" class="form-label">Ciudad</label>
+                        <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad" value="{{ old('ciudad') }}">
+                    </div>
+
+                    <div class="mb-3">
                         <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Ingresá tu contraseña" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirmá tu contraseña" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Registrarse</button>
