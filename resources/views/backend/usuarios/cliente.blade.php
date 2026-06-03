@@ -37,7 +37,7 @@
                 Explorar productos disponibles.
             </p>
 
-            <a href="{{ route('sandalias') }}" class="btn-panel">
+            <a href="{{ route('categorias') }}" class="btn-panel">
                 Ver productos
             </a>
 

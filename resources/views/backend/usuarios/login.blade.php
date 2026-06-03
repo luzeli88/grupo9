@@ -31,7 +31,10 @@
 
           <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
+            @error('password')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
           </div>
 
           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -43,6 +46,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary">Entrar</button>
+          <button type="reset" class="btn btn-secondary ms-2">Limpiar</button>
           <a href="/registro" class="btn btn-link">Crear cuenta</a>
         </form>
       </div>

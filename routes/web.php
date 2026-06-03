@@ -8,9 +8,11 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminUsuarioController;
+use App\Http\Controllers\NotificacionReingresoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Models\Producto;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 Route::get('/botas', function () {
@@ -69,6 +71,10 @@ Route::get('/producto-zapatos', function () {
     return view('producto-zapatos', compact('productos'));
 })->name('zapatos');
 
+Route::get('/categorias', function () {
+    return view('categorias');
+})->name('categorias');
+
 Route::get('/registro', [AuthController::class, 'formularioRegistro'])->name('registro');
 Route::get('/login', [AuthController::class, 'formularioLogin'])->name('login');
 
@@ -82,9 +88,13 @@ Route::get('/admin', function () {
     if (Auth::user()->rol?->nombre !== 'admin') {
         return redirect('/cliente');
     }
-    $productos = Producto::withTrashed()->get();
-    return view('backend.admin.dashboard', compact('productos'));
-})->name('admin');
+
+    $productosCount = Producto::count();
+    $usuariosActivos = Usuario::whereNull('deleted_at')->count();
+    $usuariosInactivos = Usuario::onlyTrashed()->count();
+
+    return view('backend.admin.dashboard', compact('productosCount', 'usuariosActivos', 'usuariosInactivos'));
+})->middleware('auth')->name('admin');
 
 Route::get('/cliente', function () {
     if (!Auth::check()) {
@@ -126,6 +136,8 @@ Route::post('/mis-datos/actualizar', [ClienteController::class, 'actualizar'])
     ->middleware('auth')
     ->name('mis-datos.actualizar');
 
+// Estas rutas son accesibles solo para usuarios autenticados.
+// El controlador verifica el rol para evitar acceso directo por URL.
 Route::post('/carrito/agregar/{producto_id}', [CarritoController::class, 'agregar'])
     ->middleware('auth')
     ->name('carrito.agregar');
@@ -133,6 +145,23 @@ Route::post('/carrito/agregar/{producto_id}', [CarritoController::class, 'agrega
 Route::get('/carrito', [CarritoController::class, 'index'])
     ->middleware('auth')
     ->name('carrito');
+
+Route::get('/pago', [CarritoController::class, 'pago'])
+    ->middleware('auth')
+    ->name('pago');
+
+Route::delete('/carrito/{id}', [CarritoController::class, 'eliminar'])
+    ->middleware('auth')
+    ->name('carrito.eliminar');
+
+Route::post('/pago/procesar', [CarritoController::class, 'procesarPago'])
+    ->middleware('auth')
+    ->name('pago.procesar');
+
+// Ruta para suscribirse a notificaciones de reingreso (puede ser sin autenticación)
+Route::post('/notificacion-reingreso/{producto_id}', [NotificacionReingresoController::class, 'suscribirse'])
+    ->name('notificacion.suscribirse');
+
 Route::get('/admin/usuarios', [AdminUsuarioController::class, 'index'])
     ->middleware('auth')
     ->name('admin.usuarios.index');
@@ -141,6 +170,10 @@ Route::post('/admin/usuarios/{id}/inactivar', [AdminUsuarioController::class, 'i
     ->middleware('auth')
     ->name('admin.usuarios.inactivar');
 
-Route::post('/admin/usuarios/{id}/activar', [AdminUsuarioController::class, 'activar'])
+Route::post('/admin/usuarios/{id}/rol', [AdminUsuarioController::class, 'actualizarRol'])
     ->middleware('auth')
-    ->name('admin.usuarios.activar');
+    ->name('admin.usuarios.rol');
+
+Route::get('/admin/usuarios/{id}/carrito', [AdminUsuarioController::class, 'verCarrito'])
+    ->middleware('auth')
+    ->name('admin.usuarios.carrito');

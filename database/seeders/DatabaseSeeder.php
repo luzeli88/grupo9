@@ -22,16 +22,46 @@ class DatabaseSeeder extends Seeder
         // Llamamos al RolesSeeder para crear los roles necesarios.
         $this->call(RolesSeeder::class);
 
+        // Obtenemos los IDs de los roles
+        $adminRole = Rol::where('nombre', 'admin')->first()->id;
+        $clienteRole = Rol::where('nombre', 'cliente')->first()->id;
+
         // Creamos un usuario administrador de ejemplo.
         // firstOrCreate evita que se cree otra vez si el mismo email ya existe.
         Usuario::firstOrCreate(
             ['email' => 'anfran06@gmail.com'],
             [
                 'nombre' => 'Administrador',
-                // El password se guarda como texto plano aquí solo para ejemplo,
-                // el modelo Usuario debe aplicar el hash automáticamente.
                 'password' => '123456',
-                'rol_id' => Rol::where('nombre', 'admin')->first()->id,
+                'rol_id' => $adminRole,
+            ]
+        );
+
+        // Creamos usuarios clientes de ejemplo
+        Usuario::firstOrCreate(
+            ['email' => 'juan@example.com'],
+            [
+                'nombre' => 'Juan Pérez',
+                'password' => '123456',
+                'rol_id' => $clienteRole,
+            ]
+        );
+
+        Usuario::firstOrCreate(
+            ['email' => 'maria@example.com'],
+            [
+                'nombre' => 'María García',
+                'password' => '123456',
+                'rol_id' => $clienteRole,
+            ]
+        );
+
+        Usuario::firstOrCreate(
+            ['email' => 'carlos@example.com'],
+            [
+                'nombre' => 'Carlos López',
+                'password' => '123456',
+                'rol_id' => $clienteRole,
             ]
         );
     }

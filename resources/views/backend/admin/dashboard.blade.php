@@ -1,39 +1,30 @@
 @extends('plantilla')
 
 @section('content')
+<div class="container mt-5">
+    <h1>Panel de Administración</h1>
+    <p>Bienvenido, {{ Auth::user()->nombre ?? 'Administrador' }}.</p>
 
-<div class="container my-5">
-
-    <h1 class="text-center mb-5">Panel de administración</h1>
-
-    @if(session('mensaje'))
-        <div class="alert alert-success">{{ session('mensaje') }}</div>
-    @endif
-
-    <div class="row justify-content-center g-4">
-
+    <div class="row g-4 mt-4">
         <div class="col-md-4">
-            <div class="panel-card text-center">
-                <h2>🛍️ Productos</h2>
-                <p>Gestionar productos, agregar, editar o inactivar.</p>
-                <a href="{{ route('productos.index') }}" class="btn btn-dark mb-3">Ver productos</a>
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Usuarios</h5>
+                    <p class="card-text mb-1">Activos: <strong>{{ $usuariosActivos ?? 0 }}</strong></p>
+                    <p class="card-text mb-3">Inactivos: <strong>{{ $usuariosInactivos ?? 0 }}</strong></p>
+                    <a href="{{ route('admin.usuarios.index') }}" class="btn btn-dark">Ver y gestionar usuarios</a>
+                </div>
             </div>
         </div>
-
         <div class="col-md-4">
-            <div class="panel-card text-center">
-                <h2>👥 Clientes</h2>
-                <p>Ver y gestionar los clientes registrados.</p>
-                <a href="{{ route('admin.usuarios.index') }}" class="btn btn-dark mb-3">Ver clientes</a>
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Productos</h5>
+                    <p class="card-text mb-3">Total de productos: <strong>{{ $productosCount ?? 0 }}</strong></p>
+                    <a href="{{ route('productos.index') }}" class="btn btn-dark">Ver y gestionar productos</a>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
-
 @endsection
-
-
-
-
-

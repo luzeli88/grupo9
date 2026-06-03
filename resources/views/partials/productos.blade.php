@@ -10,14 +10,14 @@
             <!-- 🖼 IMAGEN + BOTÓN -->
             <div class="img-container">
 
-                <a href="{{ route('construccion') }}">
-                    <img src="{{ asset($producto['imagen']) }}" alt="{{ $producto['nombre'] }}" onerror="window.location='{{ route('construccion') }}'">
+                <a href="#">
+                    <img src="{{ asset($producto['imagen']) }}" alt="{{ $producto['nombre'] }}">
                 </a>
 
                 <!-- BOTÓN SOBRE IMAGEN -->
-                <a href="{{ route('construccion') }}" class="btn btn-dark btn-hover">
+                <button class="btn btn-dark btn-hover" onclick="irAProducto('{{ $producto['nombre'] }}')">
                     Comprar
-                </a>
+                </button>
 
             </div>
 
@@ -50,3 +50,22 @@
     @endforeach
 
 </div>
+
+<script>
+function irAProducto(nombre) {
+    const categoria = nombre.toLowerCase();
+    let ruta = '#';
+    
+    if (categoria === 'bota') {
+        ruta = '{{ route("botas") }}';
+    } else if (categoria === 'sandalia' || categoria === 'sandalias') {
+        ruta = '{{ route("sandalias") }}';
+    } else if (categoria === 'zapato' || categoria === 'zapatos') {
+        ruta = '{{ route("zapatos") }}';
+    }
+    
+    if (ruta !== '#') {
+        window.location.href = ruta;
+    }
+}
+</script>

@@ -22,17 +22,26 @@
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="{{ old('nombre') }}">
+                        <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" placeholder="Nombre" value="{{ old('nombre') }}">
+                        @error('nombre')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="apellido" class="form-label">Apellido</label>
-                        <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" value="{{ old('apellido') }}">
+                        <input type="text" class="form-control @error('apellido') is-invalid @enderror" id="apellido" name="apellido" placeholder="Apellido" value="{{ old('apellido') }}">
+                        @error('apellido')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" value="{{ old('email') }}" required>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="correo@ejemplo.com" value="{{ old('email') }}" required>
+                        @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
@@ -52,15 +61,22 @@
 
                     <div class="mb-3">
                         <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Ingresá tu contraseña" required>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Ingresá tu contraseña" required>
+                        @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirmá tu contraseña" required>
+                        <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Confirmá tu contraseña" required>
+                        @error('password_confirmation')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <button type="submit" class="btn btn-primary">Registrarse</button>
+                    <button type="reset" class="btn btn-secondary ms-2">Limpiar</button>
                     <a href="/login" class="btn btn-link">¿Ya tenés cuenta? Iniciar sesión</a>
                 </form>
             </div>

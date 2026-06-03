@@ -21,14 +21,37 @@
                 <h5 class="card-title">{{ $producto->nombre }}</h5>
                 <p class="card-text">${{ number_format($producto->precio_venta, 0, ',', '.') }}</p>
 
-                @auth
-                    <form action="{{ route('carrito.agregar', $producto->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-dark w-100">🛒 Comprar</button>
-                    </form>
+                @if($producto->stock > 0)
+                    <!-- Producto con stock disponible -->
+                    <p class="text-success fw-bold">✅ Stock: {{ $producto->stock }} unidades</p>
+                    @auth
+                        <form action="{{ route('carrito.agregar', $producto->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-dark w-100">🛒 Comprar</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-outline-dark w-100">Iniciar sesión para comprar</a>
+                    @endauth
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-outline-dark w-100">Iniciar sesión para comprar</a>
-                @endauth
+                    <!-- Producto sin stock -->
+                    <p class="text-danger fw-bold">❌ Sin stock</p>
+                    <p class="text-muted small mb-2">Déjanos tu correo y te avisaremos cuando vuelva a estar disponible.</p>
+                    <form action="{{ route('notificacion.suscribirse', $producto->id) }}" method="POST" class="mb-0">
+                        @csrf
+                        <div class="input-group input-group-sm">
+                            @auth
+                                <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                                <button type="submit" class="btn btn-outline-primary btn-sm w-100">📧 Notificarme</button>
+                            @else
+                                <input type="email" name="email" class="form-control form-control-sm" placeholder="tu@correo.com" required>
+                                <button type="submit" class="btn btn-outline-primary btn-sm">Notificarme</button>
+                            @endauth
+                        </div>
+                        @error('email')
+                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                        @enderror
+                    </form>
+                @endif
             </div>
         </div>
     </div>

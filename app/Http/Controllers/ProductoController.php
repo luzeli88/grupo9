@@ -20,6 +20,7 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
+        // Validación del producto, incluyendo tipo y tamaño de imagen.
         $request->validate([
             'nombre'        => 'required|string|max:255',
             'categoria'     => 'required|string',
@@ -28,9 +29,10 @@ class ProductoController extends Controller
             'stock'         => 'nullable|integer',
             'stock_minimo'  => 'nullable|integer',
             'descuento'     => 'nullable|numeric',
-            'imagen'        => 'nullable|image|max:2048',
+            'imagen'        => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
+        // Solo procesamos los campos esperados del formulario.
         $datos = $request->only([
             'nombre', 'descripcion', 'categoria',
             'precio_venta', 'precio_compra',
@@ -38,6 +40,7 @@ class ProductoController extends Controller
         ]);
 
         if ($request->hasFile('imagen')) {
+            // Guardamos la imagen en el disco público si cumple los requisitos.
             $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
         }
 
@@ -54,6 +57,18 @@ class ProductoController extends Controller
 
     public function update(Request $request, Producto $producto)
     {
+        // Validación de actualización. Igual que al crear, la imagen debe ser un archivo válido.
+        $request->validate([
+            'nombre'        => 'required|string|max:255',
+            'categoria'     => 'required|string',
+            'precio_venta'  => 'required|numeric',
+            'precio_compra' => 'nullable|numeric',
+            'stock'         => 'nullable|integer',
+            'stock_minimo'  => 'nullable|integer',
+            'descuento'     => 'nullable|numeric',
+            'imagen'        => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
         $datos = $request->only([
             'nombre', 'descripcion', 'categoria',
             'precio_venta', 'precio_compra',

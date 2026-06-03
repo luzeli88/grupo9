@@ -45,9 +45,15 @@
                     </ul>                                                       
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-icon" href="{{ route('construccion') }}" aria-label="Carrito">
-                        <i class="bi bi-cart3"></i>
-                    </a>
+                    @auth
+                        <a class="nav-link nav-icon" href="{{ route('carrito') }}" aria-label="Carrito">
+                            <i class="bi bi-cart3"></i>
+                        </a>
+                    @else
+                        <a class="nav-link nav-icon" href="{{ route('login') }}" aria-label="Carrito">
+                            <i class="bi bi-cart3"></i>
+                        </a>
+                    @endauth
                 </li>
                 
                 @auth

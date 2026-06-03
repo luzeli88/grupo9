@@ -38,13 +38,15 @@
         </div>
 
         <div class="mb-3">
-            <label>Precio venta</label>
-            <input type="number" name="precio_venta" class="form-control" required>
+            <label>Precio compra</label>
+            <input type="number" id="precioCompra" name="precio_compra" class="form-control" step="0.01">
+            <small class="form-text text-muted">Ingresa el precio de compra para calcular automáticamente el precio de venta.</small>
         </div>
 
         <div class="mb-3">
-            <label>Precio compra</label>
-            <input type="number" name="precio_compra" class="form-control">
+            <label>Precio venta</label>
+            <input type="number" id="precioVenta" name="precio_venta" class="form-control" step="0.01" required>
+            <small class="form-text text-muted">Se calcula automáticamente con 230% de ganancia.</small>
         </div>
 
         <div class="mb-3">
@@ -64,7 +66,8 @@
 
         <div class="mb-3">
             <label>Imagen</label>
-            <input type="file" name="imagen" class="form-control" accept="image/*">
+            <input type="file" name="imagen" class="form-control" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
+            <div class="form-text">Formatos permitidos: jpeg, png, jpg, gif, webp. Máx 2 MB.</div>
         </div>
 
         <a href="{{ route('productos.index') }}" class="btn btn-secondary">Cancelar</a>
@@ -72,4 +75,14 @@
     </form>
 </div>
 
+<script>
+    // Cálculo automático de precio de venta con 30% de ganancia
+    // Fórmula: precio_venta = precio_compra * 1.30
+    document.getElementById('precioCompra').addEventListener('input', function() {
+        const precioCompra = parseFloat(this.value) || 0;
+        const ganancia = 0.30; // 30% de ganancia
+        const precioVenta = precioCompra * (1 + ganancia);
+        document.getElementById('precioVenta').value = precioVenta.toFixed(2);
+    });
+</script>
 @endsection
