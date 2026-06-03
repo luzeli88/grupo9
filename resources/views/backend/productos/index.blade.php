@@ -20,9 +20,9 @@
                 <th>Nombre</th>
                 <th>Categoría</th>
                 <th>Precio venta</th>
-                <th>Stock</th>
+                 <th>Stock</th>
+                <th>Talles</th>
                 <th>Estado</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -40,6 +40,11 @@
                 <td>{{ $producto->categoria }}</td>
                 <td>${{ number_format($producto->precio_venta, 0, ',', '.') }}</td>
                 <td>{{ $producto->stock }}</td>
+                <td>
+                    @foreach($producto->talles as $t)
+                        <span class="badge bg-dark">{{ $t->talle }}: {{ $t->stock }}</span>
+                    @endforeach
+                </td>
                 <td>
                     @if($producto->deleted_at)
                         <span class="badge bg-danger">Inactivo</span>

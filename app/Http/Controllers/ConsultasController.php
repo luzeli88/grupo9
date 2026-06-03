@@ -3,20 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ConsultasController extends Controller
 {
     public function procesar(Request $request)
     {
-        // Capturamos los datos enviados desde el formulario de consultas.
-        $nombre = $request->input('nombre');
-        $email = $request->input('email');
-        $mensaje = $request->input('mensaje');/* Captura el mensaje que el usuario ha ingresado en el formulario de consultas. Este mensaje puede contener preguntas, comentarios o cualquier información que el usuario quiera compartir. */
+        $request->validate([
+            'nombre'  => 'required|string',
+            'email'   => 'required|email',
+            'mensaje' => 'required|string',
+        ]);
 
-        // Enviamos los datos a la vista de éxito para mostrarlos al usuario.
+        $nombre  = $request->input('nombre');
+        $email   = $request->input('email');
+        $mensaje = $request->input('mensaje');
+
+        Mail::raw(
+            "Nueva consulta recibida:\n\nNombre: $nombre\nEmail: $email\n\nMensaje:\n$mensaje",
+            function ($mail) use ($nombre, $email) {
+                $mail->to('anfran06@gmail.com')
+                     ->subject('Nueva consulta de ' . $nombre)
+                     ->replyTo($email, $nombre);
+            }
+        );
+
         return view('exito', [
-            'nombre' => $nombre,
-            'email' => $email,
+            'nombre'  => $nombre,
+            'email'   => $email,
             'mensaje' => $mensaje,
         ]);
     }

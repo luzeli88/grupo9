@@ -44,9 +44,17 @@
                         <li><a class="dropdown-item" href="{{ route('zapatos') }}">Zapatos</a></li>
                     </ul>                                                       
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-icon" href="{{ route('construccion') }}" aria-label="Carrito">
+                 <li class="nav-item">
+                    <a class="nav-link nav-icon position-relative" href="{{ route('carrito') }}" aria-label="Carrito">
                         <i class="bi bi-cart3"></i>
+                        @auth
+                            @php $cantidadCarrito = \App\Models\Carrito::where('usuario_id', auth()->id())->sum('cantidad'); @endphp
+                            @if($cantidadCarrito > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
+                                    {{ $cantidadCarrito }}
+                                </span>
+                            @endif
+                        @endauth
                     </a>
                 </li>
                 

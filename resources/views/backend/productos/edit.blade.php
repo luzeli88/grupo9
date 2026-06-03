@@ -1,6 +1,3 @@
-Necesitás crear la vista resources/views/backend/productos/edit.blade.php:
-
-blade
 @extends('plantilla')
 
 @section('content')
@@ -77,8 +74,22 @@ blade
             <input type="file" name="imagen" class="form-control" accept="image/*">
         </div>
 
+         <div class="mb-3">
+            <label class="fw-bold">Stock por talle</label>
+            <div class="row g-2 mt-1">
+                @foreach([35, 36, 37, 38, 39, 40] as $talle)
+                <div class="col-md-2">
+                    <label>Talle {{ $talle }}</label>
+                    <input type="number" name="talles[{{ $talle }}]" class="form-control" min="0"
+                        value="{{ $talles[$talle]->stock ?? 0 }}">
+                </div>
+                @endforeach
+            </div>
+        </div>
+
         <a href="{{ route('productos.index') }}" class="btn btn-secondary">Cancelar</a>
         <button type="submit" class="btn btn-dark">Guardar cambios</button>
+
     </form>
 </div>
 

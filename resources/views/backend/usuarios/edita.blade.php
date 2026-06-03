@@ -16,7 +16,7 @@
          @csrf
 
         <div class="mb-3">
-            <label>name</label>
+            <label>Nombre</label>
            <input type="text" name="nombre" class="form-control"
        value="{{ auth()->user()->nombre }}">
         </div>
@@ -46,6 +46,9 @@
         <button type="submit" class="btn btn-dark">
             Guardar cambios
         </button>
+        <a href="{{ url()->previous() }}" class="btn btn-dark"">
+            Volver
+        </a>
     </form>
 
 </div>

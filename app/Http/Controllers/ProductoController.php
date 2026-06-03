@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+use App\Models\ProductoTalle;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
     public function index()
     {
-        $productos = Producto::withTrashed()->get();
+        $productos = Producto::withTrashed()->with('talles')->get();
         return view('backend.productos.index', compact('productos'));
     }
 
@@ -41,7 +42,22 @@ class ProductoController extends Controller
             $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
         }
 
-        Producto::create($datos);
+        $producto = Producto::create($datos);
+
+        if ($request->has('talles')) {
+            $stockTotal = 0;
+            foreach ($request->talles as $talle => $stock) {
+                $stockTalle = $stock ?? 0;
+                ProductoTalle::create([
+                    'producto_id' => $producto->id,
+                    'talle'       => $talle,
+                    'stock'       => $stockTalle,
+                ]);
+                $stockTotal += $stockTalle;
+            }
+            $producto->stock = $stockTotal;
+            $producto->save();
+        }
 
         return redirect()->route('productos.index')
             ->with('mensaje', 'Producto guardado correctamente.');
@@ -49,7 +65,8 @@ class ProductoController extends Controller
 
     public function edit(Producto $producto)
     {
-        return view('backend.productos.edit', compact('producto'));
+        $talles = $producto->talles->keyBy('talle');
+        return view('backend.productos.edit', compact('producto', 'talles'));
     }
 
     public function update(Request $request, Producto $producto)
@@ -58,13 +75,26 @@ class ProductoController extends Controller
             'nombre', 'descripcion', 'categoria',
             'precio_venta', 'precio_compra',
             'stock', 'stock_minimo', 'descuento'
+            
         ]);
+        $datos['descuento'] = $datos['descuento'] ?? 0;
+        $datos['stock'] = $datos['stock'] ?? 0;
+        $datos['stock_minimo'] = $datos['stock_minimo'] ?? 0;
 
         if ($request->hasFile('imagen')) {
             $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
         }
 
         $producto->update($datos);
+
+        if ($request->has('talles')) {
+            foreach ($request->talles as $talle => $stock) {
+                ProductoTalle::updateOrCreate(
+                    ['producto_id' => $producto->id, 'talle' => $talle],
+                    ['stock' => $stock ?? 0]
+                );
+            }
+        }
 
         return redirect()->route('productos.index')
             ->with('mensaje', 'Producto actualizado correctamente.');
@@ -73,7 +103,6 @@ class ProductoController extends Controller
     public function destroy(Producto $producto)
     {
         $producto->delete();
-
         return redirect()->route('productos.index')
             ->with('mensaje', 'Producto inactivado correctamente.');
     }

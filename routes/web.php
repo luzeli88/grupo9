@@ -1,5 +1,5 @@
-<?php
 
+<?php
 // Importamos el controlador para manejar el formulario de consultas.
 use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\AuthController;
@@ -8,6 +8,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminUsuarioController;
+use App\Http\Controllers\PagoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Models\Producto;
@@ -92,6 +93,7 @@ Route::get('/cliente', function () {
     }
     return view('backend.usuarios.cliente');
 })->name('cliente');
+
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/envio', function () {
@@ -133,6 +135,11 @@ Route::post('/carrito/agregar/{producto_id}', [CarritoController::class, 'agrega
 Route::get('/carrito', [CarritoController::class, 'index'])
     ->middleware('auth')
     ->name('carrito');
+
+Route::post('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar'])
+    ->middleware('auth')
+    ->name('carrito.actualizar');
+
 Route::get('/admin/usuarios', [AdminUsuarioController::class, 'index'])
     ->middleware('auth')
     ->name('admin.usuarios.index');
@@ -144,3 +151,40 @@ Route::post('/admin/usuarios/{id}/inactivar', [AdminUsuarioController::class, 'i
 Route::post('/admin/usuarios/{id}/activar', [AdminUsuarioController::class, 'activar'])
     ->middleware('auth')
     ->name('admin.usuarios.activar');
+Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])
+    ->middleware('auth')
+    ->name('carrito.eliminar');
+
+Route::get('/usuario/pago', function () {
+    $items = \App\Models\Carrito::where('usuario_id', auth()->id())->with('producto')->get();
+    $total = $items->sum('total');
+    return view('backend.usuarios.pago', compact('items', 'total'));
+})->middleware('auth')->name('usuario.pago');
+
+Route::post('/pago/procesar', [PagoController::class, 'procesar'])
+    ->middleware('auth')
+    ->name('pago.procesar');
+
+Route::get('/factura/{id}', function ($id) {
+    $pedido = \App\Models\Pedido::with(['items.producto', 'usuario'])->findOrFail($id);
+    return view('backend.usuarios.factura', compact('pedido'));
+})->middleware('auth')->name('factura');
+
+
+
+Route::get('/admin/pedidos', function () {
+    $pedidos = \App\Models\Pedido::with('usuario')->orderBy('created_at', 'desc')->get();
+    return view('backend.admin.pedidos', compact('pedidos'));
+})->middleware('auth')->name('admin.pedidos.index');
+
+Route::post('/admin/pedidos/{id}/estado', function ($id, \Illuminate\Http\Request $request) {
+    $pedido = \App\Models\Pedido::findOrFail($id);
+    $pedido->estado = $request->estado;
+    $pedido->save();
+    return redirect()->route('admin.pedidos.index')->with('mensaje', 'Estado actualizado.');
+})->middleware('auth')->name('admin.pedidos.estado');
+
+Route::get('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'formulario'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'enviar'])->name('password.email');
+Route::get('/reset-password/{token}', [App\Http\Controllers\PasswordResetController::class, 'formularioReset'])->name('password.reset');
+Route::post('/reset-password', [App\Http\Controllers\PasswordResetController::class, 'reset'])->name('password.update');

@@ -24,7 +24,8 @@
                 Ver o modificar mis datos personales.
             </p>
 
-            <a href="{{ route('edita') }}" class="btn-panel">Ingresar</a>
+            <a href="{{ route('edita') }}" class="btn btn-dark mb-3 d-block">
+                Ingresar</a>
 
         </div>
     </div>
@@ -37,7 +38,7 @@
                 Explorar productos disponibles.
             </p>
 
-            <a href="{{ route('sandalias') }}" class="btn-panel">
+            <a href="{{ route('sandalias') }}" class="btn btn-dark mb-3 d-block">
                 Ver productos
             </a>
 
@@ -53,7 +54,7 @@
                 Ver productos agregados para comprar.
             </p>
 
-            <a href="{{ route('carrito') }}" class="btn-panel">
+            <a href="{{ route('carrito') }}" class="btn btn-dark mb-3 d-block">
                 Ir al carrito
             </a>
 
