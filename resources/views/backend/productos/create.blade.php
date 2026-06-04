@@ -24,12 +24,12 @@
         </div>
 
         <div class="mb-3">
-            <label>Descripción</label>
+            <label>Descripcion</label>
             <input type="text" name="descripcion" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label>Categoría</label>
+            <label>Categoria</label>
             <select name="categoria" class="form-control" required>
                 <option value="botas">Botas</option>
                 <option value="sandalias">Sandalias</option>
@@ -50,12 +50,12 @@
         </div>
 
         <div class="mb-3">
-            <label>Stock</label>
+            <label>Stock general</label>
             <input type="number" name="stock" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label>Stock mínimo</label>
+            <label>Stock minimo</label>
             <input type="number" name="stock_minimo" class="form-control">
         </div>
 
@@ -68,6 +68,36 @@
             <label>Imagen</label>
             <input type="file" name="imagen" class="form-control" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
             <div class="form-text">Formatos permitidos: jpeg, png, jpg, gif, webp. Máx 2 MB.</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="fw-bold">Stock por talle</label>
+            <div class="row g-2 mt-1">
+                <div class="col-md-2">
+                    <label>Talle 35</label>
+                    <input type="number" name="talles[35]" class="form-control" value="0" min="0">
+                </div>
+                <div class="col-md-2">
+                    <label>Talle 36</label>
+                    <input type="number" name="talles[36]" class="form-control" value="0" min="0">
+                </div>
+                <div class="col-md-2">
+                    <label>Talle 37</label>
+                    <input type="number" name="talles[37]" class="form-control" value="0" min="0">
+                </div>
+                <div class="col-md-2">
+                    <label>Talle 38</label>
+                    <input type="number" name="talles[38]" class="form-control" value="0" min="0">
+                </div>
+                <div class="col-md-2">
+                    <label>Talle 39</label>
+                    <input type="number" name="talles[39]" class="form-control" value="0" min="0">
+                </div>
+                <div class="col-md-2">
+                    <label>Talle 40</label>
+                    <input type="number" name="talles[40]" class="form-control" value="0" min="0">
+                </div>
+            </div>
         </div>
 
         <a href="{{ route('productos.index') }}" class="btn btn-secondary">Cancelar</a>

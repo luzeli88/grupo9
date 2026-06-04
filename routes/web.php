@@ -1,179 +1,152 @@
 <?php
 
-// Importamos el controlador para manejar el formulario de consultas.
 use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminUsuarioController;
 use App\Http\Controllers\NotificacionReingresoController;
+use App\Http\Controllers\PagoController;
+use App\Http\Controllers\PasswordResetController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Models\Producto;
 use App\Models\Usuario;
+use App\Models\Carrito;
+use App\Models\Pedido;
 use Illuminate\Http\Request;
 
-Route::get('/botas', function () {
-    $productos = Producto::where('categoria', 'botas')->get();
-    return view('producto-Botas', compact('productos'));
-});
+// ══════════════════════════════════════════════
+//  RUTAS PÚBLICAS
+// ══════════════════════════════════════════════
 
-Route::get('/sandalias', function () {
-    $productos = Producto::where('categoria', 'sandalias')->get();
-    return view('producto-sandalias', compact('productos'));
-});
+Route::get('/', fn() => view('principal'));
 
-Route::get('/zapatos', function () {
-    $productos = Producto::where('categoria', 'zapatos')->get();
-    return view('producto-zapatos', compact('productos'));
-});
+Route::get('/quienes-somos', fn() => view('quienes-somos'))->name('quienes');
+Route::get('/comercializacion', fn() => view('comercializacion'))->name('comercializacion');
+Route::get('/contacto', fn() => view('contacto'))->name('contacto');
+Route::get('/terminos', fn() => view('terminos'))->name('terminos');
+Route::get('/envio', fn() => view('envio'))->name('envio');
+Route::get('/construccion', fn() => view('construccion'))->name('construccion');
+Route::get('/categorias', fn() => view('categorias'))->name('categorias');
 
-Route::get('/', function () {
-    return view('principal');
-});
-
-Route::get('/quienes-somos', function () {
-    return view('quienes-somos');
-})->name('quienes');
-
-Route::get('/comercializacion', function () {
-    return view('comercializacion');
-})->name('comercializacion');
-
-Route::get('/contacto', function () {
-    return view('contacto');
-})->name('contacto');
-
-Route::get('/consultas', function () {
-    return view('consultas');
-})->name('consultas');
-
+Route::get('/consultas', fn() => view('consultas'))->name('consultas');
 Route::post('/consultas', [ConsultasController::class, 'procesar']);
 
-Route::get('/terminos', function () {
-    return view('terminos');
-})->name('terminos');
-
 Route::get('/producto-sandalias', function () {
-    $productos = Producto::where('categoria', 'sandalias')->get();
-    return view('producto-sandalias', compact('productos'));
+    return view('producto-sandalias', ['productos' => Producto::where('categoria', 'sandalias')->get()]);
 })->name('sandalias');
 
 Route::get('/producto-botas', function () {
-    $productos = Producto::where('categoria', 'botas')->get();
-    return view('producto-Botas', compact('productos'));
+    return view('producto-Botas', ['productos' => Producto::where('categoria', 'botas')->get()]);
 })->name('botas');
 
 Route::get('/producto-zapatos', function () {
-    $productos = Producto::where('categoria', 'zapatos')->get();
-    return view('producto-zapatos', compact('productos'));
+    return view('producto-zapatos', ['productos' => Producto::where('categoria', 'zapatos')->get()]);
 })->name('zapatos');
-
-Route::get('/categorias', function () {
-    return view('categorias');
-})->name('categorias');
+// ── Página informativa de formas de pago (pública) ──
+Route::get('/pago', fn() => view('pago'))->name('pago');
+// ══════════════════════════════════════════════
+//  AUTENTICACIÓN
+// ══════════════════════════════════════════════
 
 Route::get('/registro', [AuthController::class, 'formularioRegistro'])->name('registro');
 Route::get('/login', [AuthController::class, 'formularioLogin'])->name('login');
-
 Route::post('/registrar', [AuthController::class, 'registrar'])->name('registrar');
 Route::post('/autenticar', [AuthController::class, 'autenticar'])->name('autenticar');
-
-Route::get('/admin', function () {
-    if (!Auth::check()) {
-        return redirect('/login');
-    }
-    if (Auth::user()->rol?->nombre !== 'admin') {
-        return redirect('/cliente');
-    }
-
-    $productosCount = Producto::count();
-    $usuariosActivos = Usuario::whereNull('deleted_at')->count();
-    $usuariosInactivos = Usuario::onlyTrashed()->count();
-
-    return view('backend.admin.dashboard', compact('productosCount', 'usuariosActivos', 'usuariosInactivos'));
-})->middleware('auth')->name('admin');
-
-Route::get('/cliente', function () {
-    if (!Auth::check()) {
-        return redirect('/login');
-    }
-    return view('backend.usuarios.cliente');
-})->name('cliente');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/envio', function () {
-    return view('envio');
-})->name('envio');
+// ── Recuperación de contraseña ────────────────
+Route::get('/forgot-password', [PasswordResetController::class, 'formulario'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetController::class, 'enviar'])->name('password.email');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'formularioReset'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
-Route::get('/pago', function () {
-    return view('pago');
-})->name('pago');
+// ══════════════════════════════════════════════
+//  RUTAS AUTENTICADAS
+// ══════════════════════════════════════════════
 
-Route::get('/construccion', function () {
-    return view('construccion');
-})->name('construccion');
+Route::middleware('auth')->group(function () {
+    // ── Notificaciones ────────────────────────
+    Route::get('/notificaciones', [NotificacionReingresoController::class, 'index'])
+        ->name('notificaciones');
+    Route::post('/notificacion/suscribirse/{producto_id}', [NotificacionReingresoController::class, 'suscribirse'])
+        ->name('notificacion.suscribirse');
+    // ── Dashboards ────────────────────────────
+    Route::get('/cliente', fn() => view('backend.usuarios.cliente'))->name('cliente');
 
-Route::resource('productos', ProductoController::class)
-     ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
-     ->middleware('auth');
+    Route::get('/admin', function () {
+        
+        if (Auth::user()->rol?->nombre !== 'admin') {
+            return redirect('/cliente');
+        }
+        return view('backend.admin.dashboard', [
+            'productosCount'    => Producto::count(),
+            'usuariosActivos'   => Usuario::whereNull('deleted_at')->count(),
+            'usuariosInactivos' => Usuario::onlyTrashed()->count(),
+        ]);
 
-Route::post('/productos/{id}/restore', [ProductoController::class, 'restore'])
-    ->middleware('auth')
-    ->name('productos.restore');
+    })->name('admin');
 
-Route::delete('/productos/{id}/force-delete', [ProductoController::class, 'forceDelete'])
-    ->middleware('auth')
-    ->name('productos.forceDelete');
+    // ── Perfil cliente ────────────────────────
+    Route::get('/edita', fn() => view('backend.usuarios.edita'))->name('edita');
+    Route::post('/mis-datos/actualizar', [ClienteController::class, 'actualizar'])
+        ->name('mis-datos.actualizar');
 
-Route::get('/edita', function () {
-    return view('backend.usuarios.edita');
-})->middleware('auth')->name('edita');
+    // ── Carrito ───────────────────────────────
+    Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+    Route::post('/carrito/agregar/{producto_id}', [CarritoController::class, 'agregar'])
+        ->name('carrito.agregar');
+    Route::patch('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar'])
+        ->name('carrito.actualizar');
+    Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])
+        ->name('carrito.eliminar');
 
-Route::post('/mis-datos/actualizar', [ClienteController::class, 'actualizar'])
-    ->middleware('auth')
-    ->name('mis-datos.actualizar');
+    // ── Pago ──────────────────────────────────
+    Route::get('/usuario/pago', function () {
+        $items = Carrito::where('usuario_id', auth()->id())->with('producto')->get();
+        $total = $items->sum('total');
+        return view('backend.usuarios.pago', compact('items', 'total'));
+    })->name('usuario.pago');
 
-// Estas rutas son accesibles solo para usuarios autenticados.
-// El controlador verifica el rol para evitar acceso directo por URL.
-Route::post('/carrito/agregar/{producto_id}', [CarritoController::class, 'agregar'])
-    ->middleware('auth')
-    ->name('carrito.agregar');
+    Route::post('/pago/procesar', [PagoController::class, 'procesar'])->name('pago.procesar');
 
-Route::get('/carrito', [CarritoController::class, 'index'])
-    ->middleware('auth')
-    ->name('carrito');
+    // ── Factura ───────────────────────────────
+    Route::get('/factura/{id}', function ($id) {
+        $pedido = Pedido::with(['items.producto', 'usuario'])->findOrFail($id);
+        return view('backend.usuarios.factura', compact('pedido'));
+    })->name('factura');
 
-Route::get('/pago', [CarritoController::class, 'pago'])
-    ->middleware('auth')
-    ->name('pago');
+    
 
-Route::delete('/carrito/{id}', [CarritoController::class, 'eliminar'])
-    ->middleware('auth')
-    ->name('carrito.eliminar');
+    // ── Productos (admin) ─────────────────────
+    Route::resource('productos', ProductoController::class)
+         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::post('/productos/{id}/restore', [ProductoController::class, 'restore'])
+         ->name('productos.restore');
+    Route::delete('/productos/{id}/force-delete', [ProductoController::class, 'forceDelete'])
+         ->name('productos.forceDelete');
 
-Route::post('/pago/procesar', [CarritoController::class, 'procesarPago'])
-    ->middleware('auth')
-    ->name('pago.procesar');
+    // ── Administración de usuarios ────────────
+    Route::prefix('admin/usuarios')->name('admin.usuarios.')->group(function () {
+        Route::get('/', [AdminUsuarioController::class, 'index'])->name('index');
+        Route::post('/{id}/inactivar', [AdminUsuarioController::class, 'inactivar'])->name('inactivar');
+        Route::post('/{id}/activar', [AdminUsuarioController::class, 'activar'])->name('activar'); // ✅ corregido
+        Route::post('/{id}/rol', [AdminUsuarioController::class, 'actualizarRol'])->name('rol');
+        Route::get('/{id}/carrito', [AdminUsuarioController::class, 'verCarrito'])->name('carrito');
+    });
 
-// Ruta para suscribirse a notificaciones de reingreso (puede ser sin autenticación)
-Route::post('/notificacion-reingreso/{producto_id}', [NotificacionReingresoController::class, 'suscribirse'])
-    ->name('notificacion.suscribirse');
+    // ── Pedidos (admin) ───────────────────────
+    Route::get('/admin/pedidos', function () {
+        $pedidos = Pedido::with('usuario')->orderBy('created_at', 'desc')->get();
+        return view('backend.admin.pedidos', compact('pedidos'));
+    })->name('admin.pedidos.index');
 
-Route::get('/admin/usuarios', [AdminUsuarioController::class, 'index'])
-    ->middleware('auth')
-    ->name('admin.usuarios.index');
-
-Route::post('/admin/usuarios/{id}/inactivar', [AdminUsuarioController::class, 'inactivar'])
-    ->middleware('auth')
-    ->name('admin.usuarios.inactivar');
-
-Route::post('/admin/usuarios/{id}/rol', [AdminUsuarioController::class, 'actualizarRol'])
-    ->middleware('auth')
-    ->name('admin.usuarios.rol');
-
-Route::get('/admin/usuarios/{id}/carrito', [AdminUsuarioController::class, 'verCarrito'])
-    ->middleware('auth')
-    ->name('admin.usuarios.carrito');
+    Route::post('/admin/pedidos/{id}/estado', function ($id, Request $request) {
+        $pedido = Pedido::findOrFail($id);
+        $pedido->estado = $request->estado;
+        $pedido->save();
+        return redirect()->route('admin.pedidos.index')->with('mensaje', 'Estado actualizado.');
+    })->name('admin.pedidos.estado');
+});

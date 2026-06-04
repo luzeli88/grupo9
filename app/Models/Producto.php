@@ -22,6 +22,10 @@ class Producto extends Model
         'descuento' ,
         'imagen' ,
     ];
+    public function talles()
+{
+    return $this->hasMany(ProductoTalle::class);
+}
 }
 
 

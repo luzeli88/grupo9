@@ -15,7 +15,7 @@ class AuthController extends Controller
     }
 
     public function formularioLogin(){
-        return view('backend.usuarios.login');
+        return view('login');
     }
 
     public function registrar(Request $request){

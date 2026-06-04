@@ -6,13 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Carrito extends Model
 {
-    // Laravel infiere el nombre de tabla en plural: "carritos".
-    // Aquí forzamos el nombre correcto que existe en la base de datos: "carrito".
     protected $table = 'carrito';
-    protected $guarded = [];
+    
+    protected $fillable = [
+        'usuario_id',
+        'producto_id',
+        'talle',
+        'cantidad',
+        'precio_unitario',
+        'total',
+    ];
 
     // Relación con el producto del carrito.
-    // Se usa en el controlador y vistas con Carrito::with('producto').
     public function producto()
     {
         return $this->belongsTo(Producto::class, 'producto_id');
