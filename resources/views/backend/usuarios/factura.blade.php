@@ -1,6 +1,29 @@
 @extends('plantilla')
 
 @section('content')
+@php
+    use App\Models\Configuracion;
+    $pctDescuentoTransferencia = Configuracion::get('descuento_transferencia', 10);
+    $pctRecargo6               = Configuracion::get('recargo_credito_6', 0);
+    $pctRecargoMas6            = Configuracion::get('recargo_credito_mas6', 15);
+
+    $subtotal  = $pedido->subtotal > 0 ? $pedido->subtotal : $pedido->items->sum('total');
+    $descuento = $pedido->descuento ?? 0;
+    $recargo   = $pedido->recargo   ?? 0;
+
+    $descripcionPago = match ($pedido->metodo_pago) {
+        'transferencia' => "Transferencia bancaria - {$pctDescuentoTransferencia}% de descuento aplicado.",
+        'credito' => $pedido->cuotas
+            ? ($pedido->cuotas > 6
+                ? "Tarjeta de crédito en {$pedido->cuotas} cuotas - {$pctRecargoMas6}% de recargo aplicado."
+                : "Tarjeta de crédito en {$pedido->cuotas} cuotas sin interés.")
+            : 'Tarjeta de crédito.',
+        'debito'      => 'Tarjeta de débito - sin descuento ni recargo.',
+        'mercadopago' => 'Mercado Pago - sin descuento ni recargo.',
+        default       => ucfirst($pedido->metodo_pago),
+    };
+@endphp
+
 <div class="container my-5">
 
     <div class="card shadow-sm p-4">
@@ -53,7 +76,23 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4" class="text-end fw-bold">Total pagado:</td>
+                    <td colspan="4" class="text-end fw-bold">Subtotal:</td>
+                    <td class="fw-bold">${{ number_format($subtotal, 0, ',', '.') }}</td>
+                </tr>
+                @if($descuento > 0)
+                <tr class="table-success">
+                    <td colspan="4" class="text-end fw-bold">Descuento:</td>
+                    <td class="fw-bold">-${{ number_format($descuento, 0, ',', '.') }}</td>
+                </tr>
+                @endif
+                @if($recargo > 0)
+                <tr class="table-warning">
+                    <td colspan="4" class="text-end fw-bold">Recargo:</td>
+                    <td class="fw-bold">${{ number_format($recargo, 0, ',', '.') }}</td>
+                </tr>
+                @endif
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">Total final:</td>
                     <td class="fw-bold">${{ number_format($pedido->total, 0, ',', '.') }}</td>
                 </tr>
             </tfoot>
@@ -62,6 +101,7 @@
         <hr>
 
         <p><strong>Metodo de pago:</strong> {{ ucfirst($pedido->metodo_pago) }}</p>
+        <p><strong>Detalle:</strong> {{ $descripcionPago }}</p>
         <p><strong>Estado:</strong> {{ ucfirst($pedido->estado) }}</p>
 
         <div class="d-flex justify-content-center gap-3 mt-4">

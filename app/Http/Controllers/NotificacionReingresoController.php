@@ -7,32 +7,33 @@ use Illuminate\Http\Request;
 
 class NotificacionReingresoController extends Controller
 {
-    // Guardar suscripción a notificación de reingreso
     public function suscribirse(Request $request, $producto_id)
     {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-
-        // Evitar duplicados: una misma persona no puede suscribirse dos veces al mismo producto
-        $existente = NotificacionReingreso::where('email', $request->email)
+        $existente = NotificacionReingreso::where('usuario_id', auth()->id())
                                           ->where('producto_id', $producto_id)
-                                          ->where('notificado', false)
+                                          ->where('notificado', 0)
                                           ->first();
 
         if ($existente) {
             return redirect()->back()->with('warning', '📧 Ya estás suscrito para recibir notificaciones de este producto.');
         }
 
-        // Crear nueva suscripción
         NotificacionReingreso::create([
-            'usuario_id'   => auth()->id() ?? null,
-            'producto_id'  => $producto_id,
-            'email'        => $request->email,
-            'notificado'   => false,
+        'usuario_id'  => auth()->id(),
+        'producto_id' => $producto_id,
+        'email'       => auth()->user()->email, // ✅ tomamos el email del usuario
+        'notificado'  => 0,
         ]);
 
         return redirect()->back()->with('mensaje', '✅ ¡Te notificaremos cuando el producto vuelva a estar disponible!');
     }
-}
 
+    public function index()
+    {
+        $notificaciones = NotificacionReingreso::where('usuario_id', auth()->id())
+                                               ->with('producto')
+                                               ->get();
+
+        return view('backend.usuarios.notificaciones', compact('notificaciones'));
+    }
+}

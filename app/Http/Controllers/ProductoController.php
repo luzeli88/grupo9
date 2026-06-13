@@ -8,12 +8,45 @@ use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
-    public function index()
-    {
-        $productos = Producto::withTrashed()->with('talles')->get();
-        return view('backend.productos.index', compact('productos'));
+    public function index(Request $request)
+{
+    $query = Producto::withTrashed()->with('talles');
+
+    if ($request->filled('buscar')) {
+        $query->whereRaw('LOWER(nombre) LIKE ?', ['%' . strtolower($request->buscar) . '%']);
     }
 
+    if ($request->filled('categoria')) {
+        $query->where('categoria', $request->categoria);
+    }
+
+    if ($request->filled('precio_min')) {
+        $query->where('precio_venta', '>=', $request->precio_min);
+    }
+
+    if ($request->filled('precio_max')) {
+        $query->where('precio_venta', '<=', $request->precio_max);
+    }
+
+    if ($request->filled('stock_min')) {
+        $query->where('stock', '>=', $request->stock_min);
+    }
+
+    if ($request->filled('stock_max')) {
+        $query->where('stock', '<=', $request->stock_max);
+    }
+
+    if ($request->filled('estado')) {
+        if ($request->estado === 'inactivo') {
+            $query->onlyTrashed();
+        } elseif ($request->estado === 'activo') {
+            $query->whereNull('deleted_at');
+        }
+    }
+
+    $productos = $query->get();
+    return view('backend.productos.index', compact('productos'));
+}
     public function create()
     {
         return view('backend.productos.create');
@@ -41,8 +74,13 @@ class ProductoController extends Controller
         ]);
 
         if ($request->hasFile('imagen')) {
-            // Guardamos la imagen en el disco público si cumple los requisitos.
-            $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
+        $categoria = $datos['categoria'];
+        $extension = $request->file('imagen')->getClientOriginalExtension();
+        $nombreUnico = uniqid('producto_', true) . '.' . $extension;
+        $ruta = "img/{$categoria}/{$nombreUnico}";
+
+        $request->file('imagen')->move(public_path("img/{$categoria}"), $nombreUnico);
+        $datos['imagen'] = $ruta;
         }
 
         $producto = Producto::create($datos);
@@ -73,48 +111,72 @@ class ProductoController extends Controller
     }
 
     public function update(Request $request, Producto $producto)
-    {
-        // Validación de actualización. Igual que al crear, la imagen debe ser un archivo válido.
-        $request->validate([
-            'nombre'        => 'required|string|max:255',
-            'categoria'     => 'required|string',
-            'precio_venta'  => 'required|numeric',
-            'precio_compra' => 'nullable|numeric',
-            'stock'         => 'nullable|integer',
-            'stock_minimo'  => 'nullable|integer',
-            'descuento'     => 'nullable|numeric',
-            'imagen'        => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
+{
+    $request->validate([
+        'nombre'        => 'required|string|max:255',
+        'categoria'     => 'required|string',
+        'precio_venta'  => 'required|numeric',
+        'precio_compra' => 'nullable|numeric',
+        'stock'         => 'nullable|integer',
+        'stock_minimo'  => 'nullable|integer',
+        'descuento'     => 'nullable|numeric',
+        'imagen'        => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
 
-        $datos = $request->only([
-            'nombre', 'descripcion', 'categoria',
-            'precio_venta', 'precio_compra',
-            'stock', 'stock_minimo', 'descuento'
-            
-        ]);
-        $datos['descuento'] = $datos['descuento'] ?? 0;
-        $datos['stock'] = $datos['stock'] ?? 0;
-        $datos['stock_minimo'] = $datos['stock_minimo'] ?? 0;
+    $datos = $request->only([
+        'nombre', 'descripcion', 'categoria',
+        'precio_venta', 'precio_compra',
+        'stock', 'stock_minimo', 'descuento'
+    ]);
 
-        if ($request->hasFile('imagen')) {
-            $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
-        }
+    $datos['descuento']    = $datos['descuento']    ?? 0;
+    $datos['stock']        = $datos['stock']         ?? 0;
+    $datos['stock_minimo'] = $datos['stock_minimo']  ?? 0;
 
-        $producto->update($datos);
+    if ($request->hasFile('imagen')) {
+    $categoria = $datos['categoria'];
+    $extension = $request->file('imagen')->getClientOriginalExtension();
+    $nombreUnico = uniqid('producto_', true) . '.' . $extension;
+    $ruta = "img/{$categoria}/{$nombreUnico}";
+    
+    $request->file('imagen')->move(public_path("img/{$categoria}"), $nombreUnico);
+    $datos['imagen'] = $ruta;
+    }
 
-        if ($request->has('talles')) {
-            foreach ($request->talles as $talle => $stock) {
-                ProductoTalle::updateOrCreate(
-                    ['producto_id' => $producto->id, 'talle' => $talle],
-                    ['stock' => $stock ?? 0]
-                );
+    if ($request->has('talles')) {
+        $stockTotal = 0;
+
+        foreach ($request->talles as $talle => $stock) {
+            $cantidad = (int)($stock ?? 0);
+            $stockTotal += $cantidad;
+
+            $existe = ProductoTalle::where('producto_id', $producto->id)
+                                   ->where('talle', $talle)
+                                   ->first();
+
+            if ($existe) {
+                ProductoTalle::where('producto_id', $producto->id)
+                             ->where('talle', $talle)
+                             ->update(['stock' => $cantidad]);
+            } else {
+                ProductoTalle::insert([
+                    'producto_id' => $producto->id,
+                    'talle'       => $talle,
+                    'stock'       => $cantidad,
+                ]);
             }
         }
 
-        return redirect()->route('productos.index')
-            ->with('mensaje', 'Producto actualizado correctamente.');
+        $datos['stock'] = $stockTotal;
     }
 
+    $producto->update($datos);
+
+    return redirect()->route('productos.index')
+        ->with('mensaje', 'Producto actualizado correctamente.');
+}
+
+    
     public function destroy(Producto $producto)
     {
         $producto->delete();

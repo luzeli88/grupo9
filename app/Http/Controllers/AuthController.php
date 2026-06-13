@@ -78,8 +78,9 @@ return redirect('/login')->with('success', 'Registro exitoso. ¡Bienvenido, ' . 
 
         // Si falla el login
         return back()->withErrors([
-            'email' => 'Email o contraseña incorrectos'
-        ]);
+        'email' => 'Email o contraseña incorrectos'
+        ])->withInput($request->only('email'));
+        
     }
 
     public function logout(Request $request){

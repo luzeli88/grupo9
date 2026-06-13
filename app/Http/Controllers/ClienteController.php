@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Usuario; //me parece que va usuario y no user, para actualizar datos del cliente
+use App\Models\Usuario; 
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller

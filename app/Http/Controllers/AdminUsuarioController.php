@@ -16,21 +16,40 @@ class AdminUsuarioController extends Controller
         }
     }
 
-    public function index()
-    {
-        $this->ensureAdmin();
+    public function index(Request $request)
+{
+    $this->ensureAdmin();
 
-        // Cargamos usuarios con su rol y contamos items en carrito.
-        $usuarios = Usuario::withTrashed()->with('rol')->get();
-        // Para cada usuario, agregamos el conteo de items en carrito.
-        $usuarios = $usuarios->map(function ($usuario) {
-            $usuario->carritoCount = Carrito::where('usuario_id', $usuario->id)->count();
-            return $usuario;
+    $query = Usuario::withTrashed()->with('rol');
+
+    if ($request->filled('buscar')) {
+        $buscar = strtolower($request->buscar);
+        $query->where(function ($q) use ($buscar) {
+            $q->whereRaw('LOWER(nombre) LIKE ?', ["%{$buscar}%"])
+              ->orWhereRaw('LOWER(email) LIKE ?', ["%{$buscar}%"]);
         });
-        
-        $roles = Rol::all();
-        return view('backend.usuarios.index', compact('usuarios', 'roles'));
     }
+
+    if ($request->filled('rol')) {
+        $query->whereHas('rol', fn($q) => $q->where('nombre', $request->rol));
+    }
+
+    if ($request->filled('estado')) {
+        if ($request->estado === 'inactivo') {
+            $query->onlyTrashed();
+        } elseif ($request->estado === 'activo') {
+            $query->whereNull('deleted_at');
+        }
+    }
+
+    $usuarios = $query->get()->map(function ($usuario) {
+        $usuario->carritoCount = Carrito::where('usuario_id', $usuario->id)->count();
+        return $usuario;
+    });
+
+    $roles = Rol::all();
+    return view('backend.usuarios.index', compact('usuarios', 'roles'));
+}
 
     public function verCarrito($usuarioId)
     {
@@ -77,4 +96,22 @@ class AdminUsuarioController extends Controller
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario activado correctamente.');
     }
+    public function editar(Request $request, $id)
+{
+    $this->ensureAdmin();
+
+    $request->validate([
+        'nombre'    => 'required|string|max:255',
+        'email'     => 'required|email|max:255',
+        'telefono'  => 'nullable|string|max:50',
+        'direccion' => 'nullable|string|max:255',
+        'ciudad'    => 'nullable|string|max:100',
+    ]);
+
+    $usuario = Usuario::withTrashed()->findOrFail($id);
+    $usuario->update($request->only(['nombre', 'email', 'telefono', 'direccion', 'ciudad']));
+
+    return redirect()->route('admin.usuarios.index')
+                     ->with('mensaje', 'Datos del usuario actualizados correctamente.');
+}
 }

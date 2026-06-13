@@ -1,6 +1,5 @@
-@auth
-@endauth
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark">
     
     <div class="container">
 

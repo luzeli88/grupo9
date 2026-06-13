@@ -715,3 +715,65 @@ h2 {
     font-size: 15px;
     white-space: nowrap;
 }
+
+Categoria de productos .categoria-banner {
+    max-width: 900px;
+
+    margin: 40px auto;
+
+    text-align: center;
+
+    padding: 50px 30px;
+
+    background: #fffef8;
+
+    border-radius: 20px;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.categoria-acento {
+    width: 80px;
+
+    height: 4px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 20px;
+
+    background: #c8b27d;
+}
+
+.categoria-etiqueta {
+    display: block;
+
+    color: #8c7b5a;
+
+    font-size: 0.85rem;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 15px;
+
+    font-weight: 600;
+}
+
+.categoria-titulo {
+    font-size: 3rem;
+
+    font-weight: 700;
+
+    color: #1f2937;
+
+    margin-bottom: 15px;
+}
+
+.categoria-descripcion {
+    color: #6b7280;
+
+    font-size: 1.1rem;
+
+    max-width: 600px;
+
+    margin: auto;
+}

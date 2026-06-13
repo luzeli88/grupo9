@@ -8,8 +8,12 @@ class Pedido extends Model
 {
     protected $fillable = [
         'usuario_id',
+        'subtotal',
         'total',
+        'descuento',
+        'recargo',
         'metodo_pago',
+        'cuotas',
         'estado',
         'numero_factura',
     ];

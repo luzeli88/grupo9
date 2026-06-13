@@ -68,7 +68,9 @@
         <div class="mb-3">
             <label>Imagen actual</label><br>
             @if($producto->imagen)
-                <img src="{{ asset('storage/' . $producto->imagen) }}" width="100" class="mb-2"><br>
+                <img src="{{ asset(str_starts_with($producto->imagen, 'img/') ? $producto->imagen : 'storage/' . $producto->imagen) }}" width="100" class="mb-2"><br>
+
+                asset(str_starts_with($producto->imagen, 'img/') ? $producto->imagen : 'storage/' . $producto->imagen)
             @else
                 Sin imagen<br>
             @endif
