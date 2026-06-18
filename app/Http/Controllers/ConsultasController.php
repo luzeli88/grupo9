@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consulta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -18,6 +19,14 @@ class ConsultasController extends Controller
         $nombre  = $request->input('nombre');
         $email   = $request->input('email');
         $mensaje = $request->input('mensaje');
+
+        // Guardar consulta en la base de datos
+        Consulta::create([
+            'nombre'  => $nombre,
+            'email'   => $email,
+            'mensaje' => $mensaje,
+            'estado'  => 'pendiente',
+        ]);
 
         Mail::raw(
             "Nueva consulta recibida:\n\nNombre: $nombre\nEmail: $email\n\nMensaje:\n$mensaje",

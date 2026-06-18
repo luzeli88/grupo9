@@ -2,10 +2,11 @@
 
 @section('content')
 @php
-    use App\Models\Configuracion;
-    $pctDescuentoTransferencia = Configuracion::get('descuento_transferencia', 10);
-    $pctRecargo6               = Configuracion::get('recargo_credito_6', 0);
-    $pctRecargoMas6            = Configuracion::get('recargo_credito_mas6', 15);
+    use App\Services\ConfiguracionService;
+    $pcts = ConfiguracionService::obtenerPorcentajes();
+    $pctDescuentoTransferencia = $pcts['descuento_transferencia'];
+    $pctRecargo6               = $pcts['recargo_credito_6'];
+    $pctRecargoMas6            = $pcts['recargo_credito_mas6'];
 
     $subtotal  = $pedido->subtotal > 0 ? $pedido->subtotal : $pedido->items->sum('total');
     $descuento = $pedido->descuento ?? 0;
@@ -66,7 +67,7 @@
             <tbody>
                 @foreach($pedido->items as $item)
                 <tr>
-                    <td>{{ $item->producto->nombre }}</td>
+                    <td>{{ ($item->producto->nombre ?? "Producto eliminado") }}</td>
                     <td>{{ $item->talle ?? '-' }}</td>
                     <td>{{ $item->cantidad }}</td>
                     <td>${{ number_format($item->precio_unitario, 0, ',', '.') }}</td>
@@ -105,9 +106,13 @@
         <p><strong>Estado:</strong> {{ ucfirst($pedido->estado) }}</p>
 
         <div class="d-flex justify-content-center gap-3 mt-4">
-            <a href="{{ route('cliente') }}" class="btn btn-dark px-5">Volver al inicio</a>
-            <button onclick="window.print()" class="btn btn-secondary px-5">Imprimir factura</button>
-        </div>
+    @if(auth()->user()->rol?->nombre === 'admin')
+        <a href="{{ route('admin') }}" class="btn btn-dark px-5">Volver al Panel</a>
+    @else
+        <a href="{{ route('cliente') }}" class="btn btn-dark px-5">Volver al Panel</a>
+    @endif
+    <button onclick="window.print()" class="btn btn-secondary px-5">Imprimir factura</button>
+</div>
 
     </div>
 

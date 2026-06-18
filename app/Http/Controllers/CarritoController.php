@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Carrito;
 use App\Models\Producto;
 use App\Models\ProductoTalle;
+use App\Services\ConfiguracionService;
 use Illuminate\Http\Request;
 
 class CarritoController extends Controller
@@ -128,22 +129,22 @@ class CarritoController extends Controller
     }
 
     // ─── Vista de pago ────────────────────────────────────────────────────────
-   public function pago()
-{
-    if ($redir = $this->soloClientes()) return $redir;
+    public function pago()
+    {
+        if ($redir = $this->soloClientes()) return $redir;
 
-    $items = Carrito::where('usuario_id', auth()->id())->with('producto')->get();
-    $total = $items->sum('total');
+        $items = Carrito::where('usuario_id', auth()->id())->with('producto')->get();
+        $total = $items->sum('total');
 
-    $descuentoTransferencia = (float) \App\Models\Configuracion::get('descuento_transferencia', 10);
-    $recargoCreditoMas6     = (float) \App\Models\Configuracion::get('recargo_credito_mas6', 15);
-    $recargoCreditoHasta6   = (float) \App\Models\Configuracion::get('recargo_credito_6', 0);
+        $pcts = ConfiguracionService::obtenerPorcentajes();
 
-    return view('backend.usuarios.pago', compact(
-        'items', 'total',
-        'descuentoTransferencia', 'recargoCreditoMas6', 'recargoCreditoHasta6'
-    ));
-}
+        return view('backend.usuarios.pago', compact(
+            'items', 'total',
+            'descuentoTransferencia' => $pcts['descuento_transferencia'],
+            'recargoCreditoMas6' => $pcts['recargo_credito_mas6'],
+            'recargoCreditoHasta6' => $pcts['recargo_credito_6']
+        ));
+    }
 
     // ─── Actualizar cantidad ──────────────────────────────────────────────────
     public function actualizar(Request $request, $id)

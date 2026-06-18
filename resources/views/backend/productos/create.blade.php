@@ -46,7 +46,7 @@
         <div class="mb-3">
             <label>Precio venta</label>
             <input type="number" id="precioVenta" name="precio_venta" class="form-control" step="0.01" required>
-            <small class="form-text text-muted">Se calcula automáticamente con 230% de ganancia.</small>
+            <small class="form-text text-muted">Se calcula automáticamente con 30% de ganancia.</small>
         </div>
 
         <div class="mb-3">

@@ -9,44 +9,44 @@ use Illuminate\Http\Request;
 class ProductoController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Producto::withTrashed()->with('talles');
+    {
+        $query = Producto::withTrashed()->with('talles');
 
-    if ($request->filled('buscar')) {
-        $query->whereRaw('LOWER(nombre) LIKE ?', ['%' . strtolower($request->buscar) . '%']);
-    }
-
-    if ($request->filled('categoria')) {
-        $query->where('categoria', $request->categoria);
-    }
-
-    if ($request->filled('precio_min')) {
-        $query->where('precio_venta', '>=', $request->precio_min);
-    }
-
-    if ($request->filled('precio_max')) {
-        $query->where('precio_venta', '<=', $request->precio_max);
-    }
-
-    if ($request->filled('stock_min')) {
-        $query->where('stock', '>=', $request->stock_min);
-    }
-
-    if ($request->filled('stock_max')) {
-        $query->where('stock', '<=', $request->stock_max);
-    }
-
-    if ($request->filled('estado')) {
-        if ($request->estado === 'inactivo') {
-            $query->onlyTrashed();
-        } elseif ($request->estado === 'activo') {
-            $query->whereNull('deleted_at');
+        if ($request->filled('buscar')) {
+            $query->buscaPorNombre($request->buscar);
         }
-    }
 
-    $productos = $query->get();
-    return view('backend.productos.index', compact('productos'));
-}
+        if ($request->filled('categoria')) {
+            $query->where('categoria', $request->categoria);
+        }
+
+        if ($request->filled('precio_min')) {
+            $query->where('precio_venta', '>=', $request->precio_min);
+        }
+
+        if ($request->filled('precio_max')) {
+            $query->where('precio_venta', '<=', $request->precio_max);
+        }
+
+        if ($request->filled('stock_min')) {
+            $query->where('stock', '>=', $request->stock_min);
+        }
+
+        if ($request->filled('stock_max')) {
+            $query->where('stock', '<=', $request->stock_max);
+        }
+
+        if ($request->filled('estado')) {
+            if ($request->estado === 'inactivo') {
+                $query->onlyTrashed();
+            } elseif ($request->estado === 'activo') {
+                $query->whereNull('deleted_at');
+            }
+        }
+
+        $productos = $query->get();
+        return view('backend.productos.index', compact('productos'));
+    }
     public function create()
     {
         return view('backend.productos.create');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BuscaGlobal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +12,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class Usuario extends Authenticatable implements CanResetPasswordContract
 {
-    use HasFactory, Notifiable, SoftDeletes, CanResetPassword;
+    use HasFactory, Notifiable, SoftDeletes, CanResetPassword, BuscaGlobal;
 
     protected $table = 'usuarios';
 

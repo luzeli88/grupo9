@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminUsuarioController;
 use App\Http\Controllers\NotificacionReingresoController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PasswordResetController;
+use App\Services\ConfiguracionService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Models\Producto;
@@ -31,9 +32,8 @@ Route::get('/contacto', fn() => view('contacto'))->name('contacto');
 Route::get('/terminos', fn() => view('terminos'))->name('terminos');
 Route::get('/envio', fn() => view('envio'))->name('envio');
 Route::get('/construccion', fn() => view('construccion'))->name('construccion');
-//Route::get('/categorias', fn() => view('categorias'))->name('categorias');
-Route::get('/categorias', function (Illuminate\Http\Request $request) {
 
+Route::get('/categorias', function (Request $request) {
     $query = Producto::with('talles');
 
     // Categoría
@@ -53,59 +53,38 @@ Route::get('/categorias', function (Illuminate\Http\Request $request) {
 
     // Talle
     if ($request->filled('talle')) {
-
         $query->whereHas('talles', function ($q) use ($request) {
-
             $q->where('talle', $request->talle)
               ->where('stock', '>', 0);
-
         });
-
     }
 
     // Orden precio
     if ($request->orden == 'asc') {
-
         $query->orderBy('precio_venta');
-
     } elseif ($request->orden == 'desc') {
-
         $query->orderByDesc('precio_venta');
-
     }
 
     $productos = $query->get();
-
     return view('categorias', [
         'productos' => $productos,
         'categoria' => $request->categoria
     ]);
-
 })->name('categorias');
 
 Route::get('/consultas', fn() => view('consultas'))->name('consultas');
 Route::post('/consultas', [ConsultasController::class, 'procesar']);
 
-Route::get('/producto-sandalias', function () {
-    return view('categorias', [
-        'productos' => Producto::with('talles')->where('categoria', 'sandalias')->get(),
-        'categoria' => 'sandalias',
-    ]);
-})->name('sandalias');
-
-Route::get('/producto-botas', function () {
-    return view('categorias', [
-        'productos' => Producto::with('talles')->where('categoria', 'botas')->get(),
-        'categoria' => 'botas',
-    ]);
-})->name('botas');
-
-Route::get('/producto-zapatos', function () {
-    return view('categorias', [
-        'productos' => Producto::with('talles')->where('categoria', 'zapatos')->get(),
-        'categoria' => 'zapatos',
-    ]);
-})->name('zapatos');
+// Rutas de categorías consolidadas
+foreach (['sandalias', 'botas', 'zapatos'] as $categoria) {
+    Route::get('/producto-' . $categoria, function () use ($categoria) {
+        return view('categorias', [
+            'productos' => Producto::with('talles')->where('categoria', $categoria)->get(),
+            'categoria' => $categoria,
+        ]);
+    })->name($categoria);
+}
 // ── Página informativa de formas de pago (pública) ──
 Route::get('/pago', fn() => view('pago'))->name('pago');
 // ══════════════════════════════════════════════
@@ -161,24 +140,16 @@ Route::middleware('auth')->group(function () {
         return response()->json(['ok' => $ok]);
     })->name('admin.verificar.clave');
 
-   Route::get('/admin/configuracion', function () {
-   $configs = [
-    'descuento_transferencia' => \App\Models\Configuracion::get('descuento_transferencia', 10),
-    'recargo_credito_6'       => \App\Models\Configuracion::get('recargo_credito_6', 0),
-      'recargo_credito_mas6'    => \App\Models\Configuracion::get('recargo_credito_mas6', 15),
-    ];
-    return view('backend.admin.configuracion', compact('configs'));
-})->name('admin.configuracion');
+    Route::get('/admin/configuracion', function () {
+        $configs = ConfiguracionService::obtenerPorcentajes();
+        return view('backend.admin.configuracion', compact('configs'));
+    })->name('admin.configuracion');
 
-Route::post('/admin/configuracion', function (Request $request) {
-  $claves = ['descuento_transferencia', 'recargo_credito_6', 'recargo_credito_mas6'];
-    foreach ($claves as $clave) {
-      \App\Models\Configuracion::where('clave', $clave)
-        ->update(['valor' => $request->input($clave, 0)]);
-    }
-    return redirect()->route('admin.configuracion')
-                   ->with('mensaje', 'Configuración guardada correctamente.');
-})->name('admin.configuracion.guardar');
+    Route::post('/admin/configuracion', function (Request $request) {
+        ConfiguracionService::actualizar($request->all());
+        return redirect()->route('admin.configuracion')
+            ->with('mensaje', 'Configuración guardada correctamente.');
+    })->name('admin.configuracion.guardar');
      
     // ── Perfil cliente ────────────────────────
     Route::get('/edita', fn() => view('backend.usuarios.edita'))->name('edita');
@@ -201,7 +172,10 @@ Route::post('/admin/configuracion', function (Request $request) {
 
     // ── Factura ───────────────────────────────
     Route::get('/factura/{id}', function ($id) {
-        $pedido = Pedido::with(['items.producto', 'usuario'])->findOrFail($id);
+        $pedido = Pedido::with([
+            'items.producto' => fn($q) => $q->withTrashed(),
+            'usuario'
+        ])->findOrFail($id);
         return view('backend.usuarios.factura', compact('pedido'));
     })->name('factura');
 
@@ -226,34 +200,29 @@ Route::post('/admin/configuracion', function (Request $request) {
     });
 
     // ── Pedidos (admin) ───────────────────────
-    //Route::get('/admin/pedidos', function () {
-      //  $pedidos = Pedido::with('usuario')->orderBy('created_at', 'desc')->get();
-       // return view('backend.admin.pedidos', compact('pedidos'));
-    //})->name('admin.pedidos.index');
-
     Route::get('/admin/pedidos', function (Request $request) {
-    $query = Pedido::with('usuario')->orderBy('created_at', 'desc');
+        $query = Pedido::with('usuario')->orderBy('created_at', 'desc');
 
-    if ($request->filled('buscar')) {
-        $query->whereHas('usuario', function ($q) use ($request) {
-            $q->whereRaw('LOWER(nombre) LIKE ?', ['%' . strtolower($request->buscar) . '%']);
-        });
-    }
+        if ($request->filled('buscar')) {
+            $query->whereHas('usuario', function ($q) use ($request) {
+                $q->buscaPorNombre($request->buscar);
+            });
+        }
 
-    if ($request->filled('metodo_pago')) {
-        $query->where('metodo_pago', $request->metodo_pago);
-    }
+        if ($request->filled('metodo_pago')) {
+            $query->where('metodo_pago', $request->metodo_pago);
+        }
 
-    if ($request->filled('estado')) {
-        $query->where('estado', $request->estado);
-    }
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
 
-    if ($request->filled('fecha_desde')) {
-        $query->whereDate('created_at', '>=', $request->fecha_desde);
-    }
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('created_at', '>=', $request->fecha_desde);
+        }
 
-    if ($request->filled('fecha_hasta')) {
-        $query->whereDate('created_at', '<=', $request->fecha_hasta);
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('created_at', '<=', $request->fecha_hasta);
     }
 
     if ($request->filled('total_min')) {
@@ -275,14 +244,7 @@ Route::post('/admin/configuracion', function (Request $request) {
         return redirect()->route('admin.pedidos.index')->with('mensaje', 'Estado actualizado.');
     })->name('admin.pedidos.estado');
 });
-Route::get('/mis-compras', function () {
-    $pedidos = \App\Models\Pedido::with(['items.producto'])
-        ->where('usuario_id', auth()->id())
-        ->orderBy('created_at', 'desc')
-        ->get();
 
-    return view('backend.usuarios.compras', compact('pedidos'));
-})->name('compras');
 Route::get('/mis-compras', function (Request $request) {
     $query = \App\Models\Pedido::with(['items.producto'])
         ->where('usuario_id', auth()->id())

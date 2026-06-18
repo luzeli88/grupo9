@@ -17,37 +17,33 @@ class AdminUsuarioController extends Controller
     }
 
     public function index(Request $request)
-{
-    $this->ensureAdmin();
+    {
+        $this->ensureAdmin();
 
-    $query = Usuario::withTrashed()->with('rol');
+        $query = Usuario::withTrashed()->with('rol');
 
-    if ($request->filled('buscar')) {
-        $buscar = strtolower($request->buscar);
-        $query->where(function ($q) use ($buscar) {
-            $q->whereRaw('LOWER(nombre) LIKE ?', ["%{$buscar}%"])
-              ->orWhereRaw('LOWER(email) LIKE ?', ["%{$buscar}%"]);
-        });
-    }
-
-    if ($request->filled('rol')) {
-        $query->whereHas('rol', fn($q) => $q->where('nombre', $request->rol));
-    }
-
-    if ($request->filled('estado')) {
-        if ($request->estado === 'inactivo') {
-            $query->onlyTrashed();
-        } elseif ($request->estado === 'activo') {
-            $query->whereNull('deleted_at');
+        if ($request->filled('buscar')) {
+            $query->buscaPorNombreOEmail($request->buscar);
         }
-    }
 
-    $usuarios = $query->get()->map(function ($usuario) {
-        $usuario->carritoCount = Carrito::where('usuario_id', $usuario->id)->count();
-        return $usuario;
-    });
+        if ($request->filled('rol')) {
+            $query->whereHas('rol', fn($q) => $q->where('nombre', $request->rol));
+        }
 
-    $roles = Rol::all();
+        if ($request->filled('estado')) {
+            if ($request->estado === 'inactivo') {
+                $query->onlyTrashed();
+            } elseif ($request->estado === 'activo') {
+                $query->whereNull('deleted_at');
+            }
+        }
+
+        $usuarios = $query->get()->map(function ($usuario) {
+            $usuario->carritoCount = Carrito::where('usuario_id', $usuario->id)->count();
+            return $usuario;
+        });
+
+        $roles = Rol::all();
     return view('backend.usuarios.index', compact('usuarios', 'roles'));
 }
 

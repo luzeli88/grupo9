@@ -47,7 +47,7 @@
         <div class="mb-3">
             <label>Precio venta</label>
             <input type="number" id="precioVenta" name="precio_venta" class="form-control" step="0.01" value="{{ $producto->precio_venta }}" required>
-            <small class="form-text text-muted">Se calcula automáticamente con 230% de ganancia.</small>
+            <small class="form-text text-muted">Se calcula automáticamente con 30% de ganancia.</small>
         </div>
 
         <div class="mb-3">
@@ -99,11 +99,11 @@
 </div>
 
 <script>
-    // Cálculo automático de precio de venta con 230% de ganancia
-    // Fórmula: precio_venta = precio_compra * 3.30
+    // Cálculo automático de precio de venta con 30% de ganancia
+    // Fórmula: precio_venta = precio_compra * 1.30
     document.getElementById('precioCompra').addEventListener('input', function() {
         const precioCompra = parseFloat(this.value) || 0;
-        const ganancia = 2.30; // 230% de ganancia
+        const ganancia = 0.30; // 30% de ganancia
         const precioVenta = precioCompra * (1 + ganancia);
         document.getElementById('precioVenta').value = precioVenta.toFixed(2);
     });
