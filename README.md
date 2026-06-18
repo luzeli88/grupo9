@@ -84,7 +84,7 @@ php artisan storage:link
 
 ---
 
-(Si mi compañera es la que desea abrir el proyecto y traer los últimos cambios, solo necesita ejecutar en la terminal dentro de la carpeta del proyecto:
+Si mi compañera es la que desea abrir el proyecto y traer los últimos cambios, solo necesita ejecutar en la terminal dentro de la carpeta del proyecto:
 ```bash
 git pull
 ```
@@ -97,7 +97,7 @@ Si solo se agregaron o modificaron datos (no la estructura) → importa el grupo
 Si se agregaron migraciones nuevas → en lugar de reimportar todo el .sql puede correr solo:
 ```bash
 php artisan migrate
-```)
+```
 ## Base de datos
 
 El proyecto usa **MariaDB como base de datos local**. Al ser local, cada desarrollador debe crearla manualmente en su entorno.
@@ -113,33 +113,37 @@ Clic en Abrir y esperá que termine la importación
 
 Listo, con eso tiene toda la estructura y los datos. No necesita correr php artisan migrate ni nada extra porque el .sql ya contiene todo.
 
+---
+ 
 ## Uso
-
+ 
 ### Roles disponibles
-
+ 
 | Rol | Acceso |
 |-----|--------|
 | `cliente` | Panel de cliente, carrito, compras, historial |
 | `admin` | Panel de administración completo |
-
+ 
 ### Funcionalidades principales
-
+ 
 **Clientes:**
 - Explorar productos por categoría (botas, sandalias, zapatos)
 - Agregar productos al carrito seleccionando talle
 - Realizar pagos con débito, crédito, transferencia o MercadoPago
 - Ver historial de compras y facturas
 - Recibir notificaciones cuando un producto sin stock vuelve a estar disponible
-
 **Administradores:**
 - Gestión completa de productos (crear, editar, activar/inactivar)
 - Gestión de usuarios con filtros y edición de datos
 - Visualización y seguimiento de pedidos
 - Configuración de porcentajes de descuento y recargo por método de pago
-
 ---
+ 
+ 
+---
+  
 ## Equipo
-
+ 
 Desarrollado por el **Grupo 9** — 2026
 
 
