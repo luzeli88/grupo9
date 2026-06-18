@@ -138,12 +138,13 @@ class CarritoController extends Controller
 
         $pcts = ConfiguracionService::obtenerPorcentajes();
 
-        return view('backend.usuarios.pago', compact(
-            'items', 'total',
+        return view('backend.usuarios.pago', [
+            'items' => $items,
+            'total' => $total,
             'descuentoTransferencia' => $pcts['descuento_transferencia'],
             'recargoCreditoMas6' => $pcts['recargo_credito_mas6'],
-            'recargoCreditoHasta6' => $pcts['recargo_credito_6']
-        ));
+            'recargoCreditoHasta6' => $pcts['recargo_credito_6'],
+        ]);
     }
 
     // ─── Actualizar cantidad ──────────────────────────────────────────────────

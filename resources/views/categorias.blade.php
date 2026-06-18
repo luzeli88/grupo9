@@ -7,6 +7,18 @@
     $categoria = $categoria ?? 'Productos';
 @endphp
 <div class="container-fluid px-4">
+    @if(session('mensaje'))
+        <div class="alert alert-success alert-dismissible fade show mt-3">
+            {{ session('mensaje') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+    @if(session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show mt-3">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
   <div class="categoria-banner mb-5">
 

@@ -163,7 +163,7 @@
                                 <tr>
                                     <td>
                                         @if($item->producto?->imagen)
-                                            <img src="{{ asset('storage/' . $item->producto->imagen) }}"
+                                            <img src="{{ asset(str_starts_with($item->producto->imagen, 'img/') ? $item->producto->imagen : 'storage/' . $item->producto->imagen) }}"
                                                  width="40" height="40"
                                                  class="rounded object-fit-cover me-2">
                                         @endif
