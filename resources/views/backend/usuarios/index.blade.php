@@ -202,13 +202,12 @@
 
                     {{-- ACCIONES --}}
                     <div class="d-flex gap-2 flex-wrap">
-                    
                         @if($usuario->deleted_at)
                             <form action="{{ route('admin.usuarios.activar', $usuario->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-success">Activar</button>
                             </form>
-                        @else
+                        @elseif($usuario->rol?->nombre !== 'admin')
                             <form id="form-inactivar-mobile-{{ $usuario->id }}"
                                   action="{{ route('admin.usuarios.inactivar', $usuario->id) }}"
                                   method="POST">
@@ -217,7 +216,7 @@
                                         class="btn btn-sm btn-secondary btn-inactivar"
                                         data-form="form-inactivar-mobile-{{ $usuario->id }}"
                                         data-nombre="{{ $usuario->nombre }}"
-                                        data-admin="{{ $usuario->rol?->nombre === 'admin' ? '1' : '0' }}">
+                                        data-admin="0">
                                     Inactivar
                                 </button>
                             </form>

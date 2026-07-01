@@ -53,12 +53,18 @@ class PedidoController extends Controller
         return redirect()->route('admin.pedidos.index')->with('mensaje', 'Estado actualizado.');
     }
 
-    public function factura($id)
+    public function factura(int $id)
     {
         $pedido = Pedido::with([
             'items.producto' => fn($q) => $q->withTrashed(),
             'usuario',
         ])->findOrFail($id);
+
+        $esAdmin = auth()->user()->rol?->nombre === 'admin';
+        if (!$esAdmin && $pedido->usuario_id !== auth()->id()) {
+            abort(403);
+        }
+
         return view('backend.usuarios.factura', compact('pedido'));
     }
 

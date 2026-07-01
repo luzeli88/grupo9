@@ -36,7 +36,7 @@ class AdminUsuarioController extends Controller
         return view('backend.usuarios.index', compact('usuarios', 'roles'));
     }
 
-    public function verCarrito($usuarioId)
+    public function verCarrito(int $usuarioId)
     {
         $usuario = Usuario::withTrashed()->findOrFail($usuarioId);
         $items = Carrito::where('usuario_id', $usuarioId)->with('producto')->get();
@@ -45,7 +45,7 @@ class AdminUsuarioController extends Controller
         return view('backend.usuarios.carrito-admin', compact('usuario', 'items', 'total'));
     }
 
-    public function actualizarRol(Request $request, $id)
+    public function actualizarRol(Request $request, int $id)
     {
         $request->validate([
             'rol_id' => 'required|exists:roles,id',
@@ -59,21 +59,33 @@ class AdminUsuarioController extends Controller
             ->with('mensaje', 'Rol actualizado correctamente.');
     }
 
-    public function inactivar($id)
+    public function inactivar(int $id)
     {
-        Usuario::findOrFail($id)->delete();
+        $usuario = Usuario::findOrFail($id);
+
+        if ($usuario->id === auth()->id()) {
+            return redirect()->route('admin.usuarios.index')
+                ->with('error', 'No podés inactivar tu propia cuenta.');
+        }
+
+        if ($usuario->rol?->nombre === 'admin') {
+            return redirect()->route('admin.usuarios.index')
+                ->with('error', 'No podés inactivar a otro administrador.');
+        }
+
+        $usuario->delete();
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario inactivado correctamente.');
     }
 
-    public function activar($id)
+    public function activar(int $id)
     {
         Usuario::withTrashed()->findOrFail($id)->restore();
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario activado correctamente.');
     }
 
-    public function editar(Request $request, $id)
+    public function editar(Request $request, int $id)
     {
         $request->validate([
             'nombre'    => 'required|string|max:255',

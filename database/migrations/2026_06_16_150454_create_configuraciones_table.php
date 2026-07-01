@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('configuraciones')) {
+            return;
+        }
+
         Schema::create('configuraciones', function (Blueprint $table) {
             $table->string('clave')->primary();
             $table->string('valor')->nullable();

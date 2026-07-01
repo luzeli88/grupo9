@@ -26,12 +26,10 @@
                     <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
                         <h5 class="card-title mb-0 text-start">{{ $producto->nombre }}</h5>
 
-                        @if($talles->isEmpty())
-                             @if($stockTotal > 0)
-                                 <span class="badge text-bg-success">Stock {{ $stockTotal }}</span>
-                             @else
-                                 <span class="badge text-bg-secondary">Sin stock</span>
-                            @endif
+                        @if($stockTotal > 0)
+                            <span class="badge text-bg-success">Stock {{ $stockTotal }}</span>
+                        @else
+                            <span class="badge text-bg-secondary">Sin stock</span>
                         @endif
                     </div>
 
