@@ -88,7 +88,7 @@ php artisan storage:link
 
 El proyecto usa **MariaDB como base de datos local**. Al ser local, cada desarrollador debe crearla manualmente en su entorno.
 
-El dump de la base de datos se encuentra en la carpeta `database/` del proyecto, con el archivo `grupo9_1906_1859.sql`. Este archivo contiene toda la estructura y los datos de prueba necesarios para ejecutar la aplicación.
+El dump de la base de datos se encuentra en la carpeta `database/` del proyecto, con el archivo `grupo9_0107_2019.sql`. Este archivo contiene toda la estructura y los datos de prueba necesarios para ejecutar la aplicación.
 
 ### Cómo importar la base de datos (HeidiSQL)
 
@@ -96,7 +96,7 @@ El dump de la base de datos se encuentra en la carpeta `database/` del proyecto,
 2. Clic derecho en el panel izquierdo → Crear nueva base de datos → nombre `grupo9`
 3. Seleccioná la base de datos `grupo9` haciendo doble clic
 4. Arriba en el menú → Archivo → Ejecutar archivo SQL
-5. Navegá hasta la carpeta del proyecto → `database/` → seleccioná `grupo9_1906_1859.sql`
+5. Navegá hasta la carpeta del proyecto → `database/` → seleccioná `grupo9_0107_2019.sql`
 6. Clic en Abrir y esperá que termine la importación
 
 Listo, con eso tiene toda la estructura y los datos. No necesita correr `php artisan migrate` ni nada extra porque el `.sql` ya contiene todo.
@@ -119,7 +119,7 @@ composer install
 
 Para la base de datos, depende de qué cambió:
 
-- Si solo se modificaron datos → importar `grupo9_1906_1859.sql` nuevamente desde HeidiSQL, reemplazando la base de datos existente.
+- Si solo se modificaron datos → importar `grupo9_0107_2019.sql` nuevamente desde HeidiSQL, reemplazando la base de datos existente.
 - Si se agregaron migraciones nuevas → correr solo:
 
 ```bash
