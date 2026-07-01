@@ -233,7 +233,7 @@ Route::middleware('auth')->group(function () {
         $query->where('total', '<=', $request->total_max);
     }
 
-    $pedidos = $query->get();
+    $pedidos = $query->paginate(15)->withQueryString();
     return view('backend.admin.pedidos', compact('pedidos'));
     })->name('admin.pedidos.index');
 

@@ -117,7 +117,7 @@
                     <div class="col-12 col-md-8 d-flex align-items-center">
                         <small class="text-muted">
                             <i class="bi bi-info-circle me-1"></i>
-                            Mostrando <strong>{{ $productos->count() }}</strong> producto(s)
+                            Mostrando <strong>{{ $productos->count() }}</strong> de <strong>{{ $productos->total() }}</strong> producto(s)
                         </small>
                     </div>
                 </div>
@@ -325,6 +325,13 @@
             </div>
         @endforelse
     </div>
+
+    {{-- PAGINACIÓN --}}
+    @if($productos->hasPages())
+        <div class="d-flex justify-content-center mt-4">
+            {{ $productos->links() }}
+        </div>
+    @endif
 
 </div>
 @endsection

@@ -121,10 +121,7 @@
                     <div class="col-12 col-md-4 d-flex align-items-center">
                         <small class="text-muted">
                             <i class="bi bi-info-circle me-1"></i>
-                            Mostrando <strong>{{ $pedidos->count() }}</strong> pedido(s)
-                            @if($pedidos->isNotEmpty())
-                                — Total: <strong>${{ number_format($pedidos->sum('total'), 0, ',', '.') }}</strong>
-                            @endif
+                            Mostrando <strong>{{ $pedidos->count() }}</strong> de <strong>{{ $pedidos->total() }}</strong> pedido(s)
                         </small>
                     </div>
 
@@ -279,6 +276,13 @@
             </div>
         @endforelse
     </div>
+
+    {{-- PAGINACIÓN --}}
+    @if($pedidos->hasPages())
+        <div class="d-flex justify-content-center mt-4">
+            {{ $pedidos->links() }}
+        </div>
+    @endif
 
 </div>
 @endsection

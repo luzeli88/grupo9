@@ -44,7 +44,7 @@ class ProductoController extends Controller
             }
         }
 
-        $productos = $query->get();
+        $productos = $query->paginate(15)->withQueryString();
         return view('backend.productos.index', compact('productos'));
     }
     public function create()
