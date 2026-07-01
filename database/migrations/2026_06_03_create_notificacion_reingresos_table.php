@@ -13,18 +13,14 @@ return new class extends Migration
     {
         Schema::create('notificacion_reingresos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('usuario_id')->nullable();
-            $table->unsignedBigInteger('producto_id');
+            $table->foreignId('usuario_id')->nullable()->constrained('usuarios')->onDelete('cascade');
+            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
             $table->string('email');
             $table->timestamp('fecha_solicitud')->useCurrent();
             $table->timestamp('fecha_notificado')->nullable();
             $table->boolean('notificado')->default(false);
             $table->timestamps();
             $table->softDeletes();
-
-            // Foreign keys
-            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
-            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
         });
     }
 

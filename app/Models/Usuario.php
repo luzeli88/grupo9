@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\NotificacionReingreso;
 use App\Traits\BuscaGlobal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,8 +36,21 @@ class Usuario extends Authenticatable implements CanResetPasswordContract
         ];
     }
 
+    protected static function boot(): void
+    {
+        parent::boot();
+        static::deleting(function (Usuario $usuario) {
+            $usuario->notificaciones()->delete();
+        });
+    }
+
     public function rol()
     {
         return $this->belongsTo(Rol::class, 'rol_id');
+    }
+
+    public function notificaciones()
+    {
+        return $this->hasMany(NotificacionReingreso::class);
     }
 }

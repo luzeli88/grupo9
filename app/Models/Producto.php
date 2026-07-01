@@ -6,6 +6,7 @@ use App\Traits\BuscaGlobal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\NotificacionReingreso;
 
 class Producto extends Model
 {
@@ -24,10 +25,23 @@ class Producto extends Model
         'descuento' ,
         'imagen' ,
     ];
+    protected static function boot(): void
+    {
+        parent::boot();
+        static::deleting(function (Producto $producto) {
+            $producto->notificaciones()->delete();
+        });
+    }
+
     public function talles()
-{
-    return $this->hasMany(ProductoTalle::class);
-}
+    {
+        return $this->hasMany(ProductoTalle::class);
+    }
+
+    public function notificaciones()
+    {
+        return $this->hasMany(NotificacionReingreso::class);
+    }
 }
 
 
