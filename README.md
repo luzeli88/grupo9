@@ -154,6 +154,66 @@ php artisan migrate
 
 ---
 
+## Solución de problemas frecuentes
+
+### Error: `No application encryption key has been specified`
+
+Ocurre cuando `APP_KEY` está vacío en el `.env`. Solucioná corriendo:
+
+```bash
+php artisan key:generate
+```
+
+### Error de conexión a la base de datos
+
+Verificá que en el `.env` tengas:
+
+```env
+DB_CONNECTION=mariadb
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=grupo9
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Asegurate de que MariaDB esté corriendo y de que la base de datos `grupo9` exista antes de importar el dump.
+
+### Error: `Class "PDO" not found` o `could not find driver`
+
+La extensión `pdo_mysql` de PHP no está habilitada. En XAMPP/Laragon habilitala desde el `php.ini` descomentando:
+
+```
+extension=pdo_mysql
+```
+
+### Error: `Target class [SomeClass] does not exist` o 500 al arrancar
+
+Probá limpiar la caché de configuración:
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+```
+
+### Las imágenes no se ven / Error en `storage/`
+
+El enlace simbólico de almacenamiento no está creado. Corré:
+
+```bash
+php artisan storage:link
+```
+
+### Error de Composer: `Your requirements could not be resolved`
+
+Si hay conflictos de versiones de PHP, usá:
+
+```bash
+composer install --ignore-platform-reqs
+```
+
+---
+
 ## Equipo
 
 Desarrollado por el **Grupo 9** — 2026
