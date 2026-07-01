@@ -98,13 +98,17 @@ class ProductoController extends Controller
         ]);
 
         if ($request->hasFile('imagen')) {
-        $categoria = $datos['categoria'];
-        $extension = $request->file('imagen')->getClientOriginalExtension();
-        $nombreUnico = uniqid('producto_', true) . '.' . $extension;
-        $ruta = "img/{$categoria}/{$nombreUnico}";
+            $categoria    = $datos['categoria'];
+            $extension    = $request->file('imagen')->getClientOriginalExtension();
+            $nombreUnico  = uniqid('producto_', true) . '.' . $extension;
+            $dirDestino   = public_path("img/{$categoria}");
 
-        $request->file('imagen')->move(public_path("img/{$categoria}"), $nombreUnico);
-        $datos['imagen'] = $ruta;
+            if (!is_dir($dirDestino)) {
+                mkdir($dirDestino, 0755, true);
+            }
+
+            $request->file('imagen')->move($dirDestino, $nombreUnico);
+            $datos['imagen'] = "img/{$categoria}/{$nombreUnico}";
         }
 
         $producto = Producto::create($datos);
@@ -148,13 +152,17 @@ class ProductoController extends Controller
     $datos['stock_minimo'] = $datos['stock_minimo']  ?? 0;
 
     if ($request->hasFile('imagen')) {
-    $categoria = $datos['categoria'];
-    $extension = $request->file('imagen')->getClientOriginalExtension();
-    $nombreUnico = uniqid('producto_', true) . '.' . $extension;
-    $ruta = "img/{$categoria}/{$nombreUnico}";
-    
-    $request->file('imagen')->move(public_path("img/{$categoria}"), $nombreUnico);
-    $datos['imagen'] = $ruta;
+        $categoria   = $datos['categoria'];
+        $extension   = $request->file('imagen')->getClientOriginalExtension();
+        $nombreUnico = uniqid('producto_', true) . '.' . $extension;
+        $dirDestino  = public_path("img/{$categoria}");
+
+        if (!is_dir($dirDestino)) {
+            mkdir($dirDestino, 0755, true);
+        }
+
+        $request->file('imagen')->move($dirDestino, $nombreUnico);
+        $datos['imagen'] = "img/{$categoria}/{$nombreUnico}";
     }
 
     if ($request->has('talles')) {

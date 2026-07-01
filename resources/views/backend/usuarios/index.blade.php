@@ -2,31 +2,122 @@
 
 @section('content')
 <div class="container my-5">
-    <h1 class="mb-4">Clientes</h1>
+
+    <h1 class="mb-1 fw-light">Gestión de Usuarios</h1>
+    <p class="text-muted mb-4">Administrá clientes y administradores</p>
 
     @if(session('mensaje'))
-        <div class="alert alert-success">{{ session('mensaje') }}</div>
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('mensaje') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
     @endif
 
-    
-    <a href="{{ route('admin') }}" class="btn btn-outline-secondary">
+    {{-- ACCIONES --}}
+    <div class="mb-4">
+        <a href="{{ route('admin') }}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Volver al panel
-    </a>
+        </a>
+    </div>
+
     {{-- FILTROS --}}
-    <form method="GET" action="{{ route('admin.usuarios.index') }}" class="row g-2 mb-4">
-        <div class="col-12 col-md-4">
-            <input type="text"
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <h6 class="fw-semibold mb-3"><i class="bi bi-funnel me-2"></i>Filtros</h6>
+            <form method="GET" action="{{ route('admin.usuarios.index') }}">
+                <div class="row g-2">
+
+                    <div class="col-12 col-md-4">
+                        <input type="text"
+                               name="buscar"
+                               class="form-control form-control-sm"
+                               placeholder="Buscar por nombre o email..."
+                               value="{{ request('buscar') }}">
+                    </div>
+
+                    <div class="col-6 col-md-2">
+                        <select name="rol" class="form-select form-select-sm">
+                            <option value="">Todos los roles</option>
+                            <option value="cliente"  {{ request('rol') === 'cliente'  ? 'selected' : '' }}>Cliente</option>
+                            <option value="admin"    {{ request('rol') === 'admin'    ? 'selected' : '' }}>Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-2">
+                        <select name="estado" class="form-select form-select-sm">
+                            <option value="">Todos los estados</option>
+                            <option value="activo"   {{ request('estado') === 'activo'   ? 'selected' : '' }}>Activo</option>
+                            <option value="inactivo" {{ request('estado') === 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-2 d-flex gap-1">
+                        <button type="submit" class="btn btn-dark btn-sm w-100">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <a href="{{ route('admin.usuarios.index') }}" class="btn btn-outline-secondary btn-sm w-100">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-md-2 d-flex align-items-center">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Mostrando <strong>{{ $usuarios->count() }}</strong> de <strong>{{ $usuarios->total() }}</strong> usuario(s)
+                        </small>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- TABLA — desktop --}}
+    <div class="d-none d-xl-block">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width:50px">ID</th>
+                    <th>Nombre / Email</th>
+                    <th>Teléfono</th>
+                    <th>Ciudad</th>
+                    <th>Estado</th>
+                    <th>Carrito</th>
+                    <th>Rol</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
             </thead>
             <tbody>
                 @forelse($usuarios as $usuario)
                 <tr>
-                    <td>{{ $usuario->id }}</td>
-                    <td>{{ $usuario->nombre }}</td>
-                    <td>{{ $usuario->email }}</td>
-                    <td>{{ $usuario->telefono ?? '-' }}</td>
-                    <td>{{ $usuario->ciudad ?? '-' }}</td>
-
-                    {{-- ROL --}}
+                    <td class="text-muted small">{{ $usuario->id }}</td>
+                    <td>
+                        <div class="fw-semibold">{{ $usuario->nombre }}</div>
+                        <small class="text-muted">{{ $usuario->email }}</small>
+                    </td>
+                    <td class="small">{{ $usuario->telefono ?? '-' }}</td>
+                    <td class="small">{{ $usuario->ciudad ?? '-' }}</td>
+                    <td>
+                        @if($usuario->deleted_at)
+                            <span class="badge bg-danger">Inactivo</span>
+                        @else
+                            <span class="badge bg-success">Activo</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($usuario->carritoCount > 0)
+                            <span class="badge bg-warning text-dark">{{ $usuario->carritoCount }} items</span>
+                            <a href="{{ route('admin.usuarios.carrito', $usuario->id) }}" class="btn btn-sm btn-outline-info ms-1">Ver</a>
+                        @else
+                            <span class="badge bg-secondary">Vacío</span>
+                        @endif
+                    </td>
                     <td>
                         <form method="POST"
                               action="{{ route('admin.usuarios.rol', $usuario->id) }}"
@@ -45,62 +136,48 @@
                             </div>
                         </form>
                     </td>
-
-                    {{-- ESTADO --}}
                     <td>
-                        @if($usuario->deleted_at)
-                            <span class="badge bg-danger">Inactivo</span>
-                        @else
-                            <span class="badge bg-success">Activo</span>
-                        @endif
-                    </td>
+                        <div class="d-flex flex-column gap-1">
+                            <button type="button"
+                                    class="btn btn-sm btn-warning btn-editar"
+                                    data-id="{{ $usuario->id }}"
+                                    data-nombre="{{ $usuario->nombre }}"
+                                    data-email="{{ $usuario->email }}"
+                                    data-telefono="{{ $usuario->telefono }}"
+                                    data-direccion="{{ $usuario->direccion }}"
+                                    data-ciudad="{{ $usuario->ciudad }}">
+                                <i class="bi bi-pencil me-1"></i>Editar
+                            </button>
 
-                    {{-- CARRITO --}}
-                    <td>
-                        @if($usuario->carritoCount > 0)
-                            <span class="badge bg-warning text-dark">{{ $usuario->carritoCount }} items</span>
-                            <a href="{{ route('admin.usuarios.carrito', $usuario->id) }}" class="btn btn-sm btn-outline-info">Ver</a>
-                        @else
-                            <span class="badge bg-secondary">Vacío</span>
-                        @endif
-                    </td>
-
-                    {{-- ACCIONES --}}
-                    <td>
-        
-
-                        @if($usuario->rol?->nombre === 'admin')
-    <span class="badge bg-dark">
-        Administrador Principal
-    </span>
-
-@elseif($usuario->deleted_at)
-    <form action="{{ route('admin.usuarios.activar', $usuario->id) }}" method="POST" style="display:inline">
-        @csrf
-        <button type="submit" class="btn btn-sm btn-success">
-            Activar
-        </button>
-    </form>
-
-@else
-    <form id="form-inactivar-{{ $usuario->id }}"
-          action="{{ route('admin.usuarios.inactivar', $usuario->id) }}"
-          method="POST"
-          style="display:inline">
-        @csrf
-        <button type="button"
-                class="btn btn-sm btn-secondary btn-inactivar"
-                data-form="form-inactivar-{{ $usuario->id }}"
-                data-nombre="{{ $usuario->nombre }}">
-            Inactivar
-        </button>
-    </form>
-@endif
+                            @if($usuario->rol?->nombre === 'admin')
+                                <span class="badge bg-dark text-center py-2">Administrador</span>
+                            @elseif($usuario->deleted_at)
+                                <form action="{{ route('admin.usuarios.activar', $usuario->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-success w-100">
+                                        <i class="bi bi-check-lg me-1"></i>Activar
+                                    </button>
+                                </form>
+                            @else
+                                <form id="form-inactivar-{{ $usuario->id }}"
+                                      action="{{ route('admin.usuarios.inactivar', $usuario->id) }}"
+                                      method="POST">
+                                    @csrf
+                                    <button type="button"
+                                            class="btn btn-sm btn-secondary w-100 btn-inactivar"
+                                            data-form="form-inactivar-{{ $usuario->id }}"
+                                            data-nombre="{{ $usuario->nombre }}"
+                                            data-admin="0">
+                                        <i class="bi bi-pause-circle me-1"></i>Inactivar
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </td>
                 </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center text-muted py-3">
+                        <td colspan="8" class="text-center text-muted py-4">
                             <i class="bi bi-search me-2"></i>
                             No se encontraron usuarios con ese criterio.
                         </td>
@@ -110,47 +187,23 @@
         </table>
     </div>
 
-    {{-- ═══════════════════════════════════════════ --}}
-    {{-- CARDS — solo visible en pantallas chicas    --}}
-    {{-- ═══════════════════════════════════════════ --}}
+    {{-- CARDS — mobile y tablet --}}
     <div class="d-xl-none">
         @forelse($usuarios as $usuario)
             <div class="card mb-3 shadow-sm border-0">
                 <div class="card-body">
 
                     {{-- CABECERA --}}
-                    <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
                             <h6 class="mb-0 fw-bold">{{ $usuario->nombre }}</h6>
                             <small class="text-muted">{{ $usuario->email }}</small>
                         </div>
-                        @if($usuario->rol?->nombre === 'admin')
-    <span class="badge bg-dark">
-        Administrador Principal
-    </span>
-
-@elseif($usuario->deleted_at)
-    <form action="{{ route('admin.usuarios.activar', $usuario->id) }}" method="POST" style="display:inline">
-        @csrf
-        <button type="submit" class="btn btn-sm btn-success">
-            Activar
-        </button>
-    </form>
-
-@else
-    <form id="form-inactivar-{{ $usuario->id }}"
-          action="{{ route('admin.usuarios.inactivar', $usuario->id) }}"
-          method="POST"
-          style="display:inline">
-        @csrf
-        <button type="button"
-                class="btn btn-sm btn-secondary btn-inactivar"
-                data-form="form-inactivar-{{ $usuario->id }}"
-                data-nombre="{{ $usuario->nombre }}">
-            Inactivar
-        </button>
-    </form>
-@endif
+                        @if($usuario->deleted_at)
+                            <span class="badge bg-danger">Inactivo</span>
+                        @else
+                            <span class="badge bg-success">Activo</span>
+                        @endif
                     </div>
 
                     <hr class="my-2">
@@ -202,6 +255,17 @@
 
                     {{-- ACCIONES --}}
                     <div class="d-flex gap-2 flex-wrap">
+                        <button type="button"
+                                class="btn btn-sm btn-warning btn-editar"
+                                data-id="{{ $usuario->id }}"
+                                data-nombre="{{ $usuario->nombre }}"
+                                data-email="{{ $usuario->email }}"
+                                data-telefono="{{ $usuario->telefono }}"
+                                data-direccion="{{ $usuario->direccion }}"
+                                data-ciudad="{{ $usuario->ciudad }}">
+                            <i class="bi bi-pencil me-1"></i>Editar
+                        </button>
+
                         @if($usuario->deleted_at)
                             <form action="{{ route('admin.usuarios.activar', $usuario->id) }}" method="POST">
                                 @csrf
@@ -217,7 +281,7 @@
                                         data-form="form-inactivar-mobile-{{ $usuario->id }}"
                                         data-nombre="{{ $usuario->nombre }}"
                                         data-admin="0">
-                                    Inactivar
+                                    <i class="bi bi-pause-circle me-1"></i>Inactivar
                                 </button>
                             </form>
                         @endif
@@ -232,6 +296,13 @@
             </div>
         @endforelse
     </div>
+
+    {{-- PAGINACIÓN --}}
+    @if($usuarios->hasPages())
+        <div class="d-flex justify-content-center mt-4">
+            {{ $usuarios->links() }}
+        </div>
+    @endif
 
 </div>
 
@@ -310,7 +381,6 @@
 
 {{-- JAVASCRIPT --}}
 <script>
-// ── Confirmar cambio de rol ───────────────────────────────
 document.querySelectorAll('.form-cambio-rol').forEach(form => {
     form.addEventListener('submit', function (e) {
         const nombre   = this.dataset.nombre;
@@ -322,7 +392,6 @@ document.querySelectorAll('.form-cambio-rol').forEach(form => {
     });
 });
 
-// ── Abrir modal inactivar ─────────────────────────────────
 let formInactivar = null;
 
 document.querySelectorAll('.btn-inactivar').forEach(btn => {
@@ -339,7 +408,6 @@ document.querySelectorAll('.btn-inactivar').forEach(btn => {
     });
 });
 
-// ── Confirmar inactivar (con o sin clave) ─────────────────
 document.getElementById('btnConfirmarInactivar').addEventListener('click', async function () {
     const bloqueAdmin = document.getElementById('bloqueClaveAdmin');
     const esAdmin = !bloqueAdmin.classList.contains('d-none');
@@ -372,7 +440,6 @@ document.getElementById('btnConfirmarInactivar').addEventListener('click', async
     if (formInactivar) formInactivar.submit();
 });
 
-// ── Abrir modal editar ────────────────────────────────────
 document.querySelectorAll('.btn-editar').forEach(btn => {
     btn.addEventListener('click', function () {
         document.getElementById('editNombre').value    = this.dataset.nombre    ?? '';
@@ -387,11 +454,5 @@ document.querySelectorAll('.btn-editar').forEach(btn => {
     });
 });
 </script>
-
-@if($usuarios->hasPages())
-    <div class="d-flex justify-content-center mt-4">
-        {{ $usuarios->links() }}
-    </div>
-@endif
 
 @endsection

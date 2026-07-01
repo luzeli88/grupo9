@@ -19,7 +19,7 @@ class PasswordResetController extends Controller
         $status = Password::sendResetLink($request->only('email'));
 
         return $status === Password::RESET_LINK_SENT
-            ? back()->with('success', 'Te enviamos un link para restablecer tu contrasena.')
+            ? back()->with('success', 'Te enviamos un link para restablecer tu contraseña.')
             : back()->withErrors(['email' => 'No encontramos ese email.']);
     }
 
@@ -45,7 +45,7 @@ class PasswordResetController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('success', 'Contrasena actualizada correctamente.')
-            : back()->withErrors(['email' => 'Error al restablecer la contrasena.']);
+            ? redirect()->route('login')->with('success', 'Contraseña actualizada correctamente.')
+            : back()->withErrors(['email' => 'Error al restablecer la contraseña.']);
     }
 }

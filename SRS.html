@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 11pt;
+    margin: 2.5cm 3cm;
+    color: #000;
+    line-height: 1.4;
+  }
+
+  /* ── Encabezado de página ── */
+  .page-header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 6px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 9pt;
+    color: #555;
+  }
+  .page-header .title-block { text-align: center; }
+  .page-header .rev-block   { text-align: right; white-space: nowrap; }
+
+  /* ── Portada ── */
+  .cover {
+    text-align: center;
+    margin-top: 120px;
+    margin-bottom: 80px;
+    border-top: 3px solid #000;
+    border-bottom: 3px solid #000;
+    padding: 30px 0;
+  }
+  .cover h1 { font-size: 20pt; font-weight: bold; margin: 0 0 8px; }
+  .cover .subtitle { font-size: 12pt; font-weight: bold; color: #444; margin: 4px 0; }
+  .cover .meta { font-size: 10pt; color: #555; margin-top: 16px; }
+
+  /* ── Títulos ── */
+  h1.section { font-size: 16pt; border-bottom: 1px solid #aaa; padding-bottom: 4px; margin-top: 36px; page-break-before: always; }
+  h1.section:first-of-type { page-break-before: avoid; }
+  h2.subsection { font-size: 13pt; margin-top: 24px; margin-bottom: 6px; }
+  h3.subsubsection { font-size: 11pt; margin-top: 16px; margin-bottom: 4px; }
+
+  /* ── Tabla de contenido ── */
+  .toc { margin: 20px 0; }
+  .toc a { color: #000; text-decoration: none; }
+  .toc .toc1 { margin: 4px 0; font-weight: bold; }
+  .toc .toc2 { margin: 2px 0 2px 20px; }
+  .toc .toc3 { margin: 2px 0 2px 40px; }
+
+  /* ── Tablas ── */
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 10pt; }
+  th { background-color: #dce6f1; font-weight: bold; padding: 6px 10px; border: 1px solid #aaa; text-align: left; }
+  td { padding: 5px 10px; border: 1px solid #aaa; vertical-align: top; }
+  tr:nth-child(even) td { background-color: #f5f5f5; }
+
+  /* ── Tabla de requisito ── */
+  .req-table th { width: 35%; background-color: #e2efda; }
+
+  /* ── Etiquetas de prioridad ── */
+  .prio-alta   { background-color: #c6efce; padding: 2px 8px; border-radius: 3px; font-size: 9pt; font-weight: bold; }
+  .prio-media  { background-color: #ffeb9c; padding: 2px 8px; border-radius: 3px; font-size: 9pt; font-weight: bold; }
+  .prio-baja   { background-color: #ffc7ce; padding: 2px 8px; border-radius: 3px; font-size: 9pt; font-weight: bold; }
+
+  /* ── Listas ── */
+  ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+  li { margin: 3px 0; }
+
+  /* ── Bloque de diagrama ── */
+  .diagram {
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    padding: 14px 20px;
+    display: inline-block;
+    margin: 10px 0;
+  }
+
+  /* ── Nota / aviso ── */
+  .note {
+    background: #fff8dc;
+    border-left: 4px solid #f0ad4e;
+    padding: 8px 12px;
+    font-size: 10pt;
+    margin: 8px 0;
+  }
+
+  /* ── Pie de página ── */
+  .page-footer {
+    border-top: 1px solid #aaa;
+    margin-top: 40px;
+    padding-top: 4px;
+    font-size: 9pt;
+    color: #777;
+    text-align: center;
+  }
+
+  @media print {
+    h1.section { page-break-before: always; }
+    .cover { page-break-after: always; }
+    table { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     PORTADA
+═══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <h1>Especificación de Requisitos de Software</h1>
+  <div class="subtitle">Proyecto: Step &amp; Style</div>
+  <div class="subtitle">Revisión 1.0</div>
+  <div class="meta">
+    Grupo 9<br>
+    Junio 2026
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FICHA DEL DOCUMENTO
+═══════════════════════════════════════════════════════════ -->
+<h1 class="section">Ficha del documento</h1>
+
+<table>
+  <tr><th>Fecha</th><th>Revisión</th><th>Autor</th><th>Verificado</th></tr>
+  <tr><td>Junio 2026</td><td>1.0</td><td>Grupo 9</td><td></td></tr>
+</table>
+
+<p>Documento validado por las partes en fecha: _______________</p>
+<table>
+  <tr><th>Por el cliente</th><th>Por la empresa suministradora</th></tr>
+  <tr><td style="height:60px"></td><td></td></tr>
+  <tr><td>Fdo. ___________________________</td><td>Fdo. ___________________________</td></tr>
+</table>
+
+<!-- ══════════════════════════════════════════════════════════
+     TABLA DE CONTENIDO
+═══════════════════════════════════════════════════════════ -->
+<h1 class="section" style="page-break-before:avoid">Contenido</h1>
+
+<div class="toc">
+  <div class="toc1">1&nbsp;&nbsp;Introducción</div>
+  <div class="toc2">1.1&nbsp;&nbsp;Propósito</div>
+  <div class="toc2">1.2&nbsp;&nbsp;Alcance</div>
+  <div class="toc2">1.3&nbsp;&nbsp;Personal involucrado</div>
+  <div class="toc2">1.4&nbsp;&nbsp;Definiciones, acrónimos y abreviaturas</div>
+  <div class="toc2">1.5&nbsp;&nbsp;Referencias</div>
+  <div class="toc2">1.6&nbsp;&nbsp;Resumen</div>
+  <div class="toc1">2&nbsp;&nbsp;Descripción general</div>
+  <div class="toc2">2.1&nbsp;&nbsp;Perspectiva del producto</div>
+  <div class="toc2">2.2&nbsp;&nbsp;Funcionalidad del producto</div>
+  <div class="toc2">2.3&nbsp;&nbsp;Características de los usuarios</div>
+  <div class="toc2">2.4&nbsp;&nbsp;Restricciones</div>
+  <div class="toc2">2.5&nbsp;&nbsp;Suposiciones y dependencias</div>
+  <div class="toc2">2.6&nbsp;&nbsp;Evolución previsible del sistema</div>
+  <div class="toc1">3&nbsp;&nbsp;Requisitos específicos</div>
+  <div class="toc2">3.1&nbsp;&nbsp;Requisitos comunes de los interfaces</div>
+  <div class="toc3">3.1.1&nbsp;&nbsp;Interfaces de usuario</div>
+  <div class="toc3">3.1.2&nbsp;&nbsp;Interfaces de hardware</div>
+  <div class="toc3">3.1.3&nbsp;&nbsp;Interfaces de software</div>
+  <div class="toc3">3.1.4&nbsp;&nbsp;Interfaces de comunicación</div>
+  <div class="toc2">3.2&nbsp;&nbsp;Requisitos funcionales (RF-01 a RF-18)</div>
+  <div class="toc2">3.3&nbsp;&nbsp;Requisitos no funcionales (RNF-01 a RNF-06)</div>
+  <div class="toc3">3.3.1&nbsp;&nbsp;Requisitos de rendimiento</div>
+  <div class="toc3">3.3.2&nbsp;&nbsp;Seguridad</div>
+  <div class="toc3">3.3.3&nbsp;&nbsp;Fiabilidad</div>
+  <div class="toc3">3.3.4&nbsp;&nbsp;Disponibilidad</div>
+  <div class="toc3">3.3.5&nbsp;&nbsp;Mantenibilidad</div>
+  <div class="toc3">3.3.6&nbsp;&nbsp;Portabilidad</div>
+  <div class="toc2">3.4&nbsp;&nbsp;Otros requisitos</div>
+  <div class="toc1">4&nbsp;&nbsp;Apéndices</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECCIÓN 1 — INTRODUCCIÓN
+═══════════════════════════════════════════════════════════ -->
+<div class="page-header">
+  <div>Step &amp; Style</div>
+  <div class="title-block">Especificación de requisitos de software</div>
+  <div class="rev-block">Rev. 1.0</div>
+</div>
+
+<h1 class="section">1&nbsp;&nbsp;Introducción</h1>
+
+<p>Este documento constituye la Especificación de Requisitos de Software (SRS) del sistema <strong>Step &amp; Style</strong>, una plataforma de comercio electrónico de calzado. Se describen el comportamiento esperado del sistema, sus funcionalidades y las restricciones bajo las cuales debe operar, siguiendo el estándar IEEE Std 830-1998.</p>
+
+<h2 class="subsection">1.1&nbsp;&nbsp;Propósito</h2>
+
+<p>El propósito de este documento es describir de manera completa y precisa los requisitos funcionales y no funcionales del sistema Step &amp; Style.</p>
+<p>Está dirigido a:</p>
+<ul>
+  <li>El equipo de desarrollo (Grupo 9), como guía de implementación.</li>
+  <li>Docentes evaluadores, como instrumento de validación del proyecto.</li>
+</ul>
+
+<h2 class="subsection">1.2&nbsp;&nbsp;Alcance</h2>
+
+<p><strong>Step &amp; Style</strong> es una plataforma de e-commerce de calzado desarrollada como proyecto académico. Permite a clientes explorar y comprar productos, y a administradores gestionar el catálogo, los usuarios y los pedidos.</p>
+
+<p>El sistema cubre:</p>
+<ul>
+  <li>Catálogo público de productos con filtros por categoría, precio y talle.</li>
+  <li>Registro, autenticación y recuperación de contraseña de usuarios.</li>
+  <li>Carrito de compras y proceso de pago con múltiples métodos.</li>
+  <li>Generación de factura digital por compra.</li>
+  <li>Notificaciones de reingreso de stock.</li>
+  <li>Panel de administración para productos, usuarios, pedidos y configuración de precios.</li>
+</ul>
+
+<p>Queda fuera del alcance: integración real con pasarelas de pago externas (los pagos son simulados), envíos físicos y facturación electrónica fiscal.</p>
+
+<h2 class="subsection">1.3&nbsp;&nbsp;Personal involucrado</h2>
+
+<table>
+  <tr><th>Campo</th><th>Detalle</th></tr>
+  <tr><td>Nombre</td><td>Grupo 9</td></tr>
+  <tr><td>Rol</td><td>Equipo de desarrollo</td></tr>
+  <tr><td>Categoría profesional</td><td>Estudiantes de desarrollo de software</td></tr>
+  <tr><td>Responsabilidades</td><td>Análisis, diseño, desarrollo, pruebas y documentación</td></tr>
+  <tr><td>Información de contacto</td><td>anfran06@gmail.com</td></tr>
+  <tr><td>Aprobación</td><td>Docentes de la materia</td></tr>
+</table>
+
+<h2 class="subsection">1.4&nbsp;&nbsp;Definiciones, acrónimos y abreviaturas</h2>
+
+<table>
+  <tr><th>Término</th><th>Definición</th></tr>
+  <tr><td>SRS</td><td>Software Requirements Specification — Especificación de Requisitos de Software</td></tr>
+  <tr><td>RF</td><td>Requisito Funcional</td></tr>
+  <tr><td>RNF</td><td>Requisito No Funcional</td></tr>
+  <tr><td>Admin</td><td>Usuario con rol de administrador del sistema</td></tr>
+  <tr><td>Cliente</td><td>Usuario registrado con acceso al panel de compras</td></tr>
+  <tr><td>Visitante</td><td>Usuario no autenticado que navega el sitio</td></tr>
+  <tr><td>Soft delete</td><td>Eliminación lógica: el registro no se borra físicamente de la base de datos</td></tr>
+  <tr><td>Carrito</td><td>Colección temporal de productos seleccionados antes de confirmar la compra</td></tr>
+  <tr><td>Pedido</td><td>Orden de compra confirmada y registrada en el sistema</td></tr>
+  <tr><td>Talle</td><td>Número de calzado disponible para cada producto</td></tr>
+  <tr><td>Stock</td><td>Cantidad disponible de un producto por talle</td></tr>
+  <tr><td>MercadoPago</td><td>Plataforma de pagos digitales simulada en el sistema</td></tr>
+  <tr><td>ORM</td><td>Object-Relational Mapper (Eloquent en este proyecto)</td></tr>
+  <tr><td>CSRF</td><td>Cross-Site Request Forgery, ataque web prevenido mediante tokens</td></tr>
+  <tr><td>MariaDB</td><td>Sistema de gestión de base de datos relacional utilizado</td></tr>
+  <tr><td>Herd</td><td>Entorno de desarrollo local para PHP/Laravel</td></tr>
+</table>
+
+<h2 class="subsection">1.5&nbsp;&nbsp;Referencias</h2>
+
+<table>
+  <tr><th>Referencia</th><th>Título</th><th>Fecha</th></tr>
+  <tr><td>IEEE Std 830-1998</td><td>IEEE Recommended Practice for Software Requirements Specifications</td><td>1998</td></tr>
+  <tr><td>Laravel 13 Docs</td><td>Documentación oficial de Laravel</td><td>2025</td></tr>
+  <tr><td>README.md</td><td>Documentación de instalación del proyecto</td><td>Junio 2026</td></tr>
+</table>
+
+<h2 class="subsection">1.6&nbsp;&nbsp;Resumen</h2>
+
+<p>El documento está organizado en cuatro secciones:</p>
+<ul>
+  <li><strong>Sección 2:</strong> Descripción general del sistema, funcionalidad de alto nivel y características de los usuarios.</li>
+  <li><strong>Sección 3:</strong> Requisitos específicos: interfaces, requisitos funcionales numerados y requisitos no funcionales.</li>
+  <li><strong>Sección 4:</strong> Apéndices con información complementaria (modelo de datos, roles, métodos de pago).</li>
+</ul>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECCIÓN 2 — DESCRIPCIÓN GENERAL
+═══════════════════════════════════════════════════════════ -->
+<h1 class="section">2&nbsp;&nbsp;Descripción general</h1>
+
+<h2 class="subsection">2.1&nbsp;&nbsp;Perspectiva del producto</h2>
+
+<p>Step &amp; Style es un sistema independiente de comercio electrónico orientado a la venta minorista de calzado. No forma parte de un sistema mayor preexistente.</p>
+
+<p>El sistema se compone de:</p>
+<ul>
+  <li>Una <strong>interfaz pública</strong> (frontend) accesible por cualquier visitante.</li>
+  <li>Un <strong>panel de cliente</strong> para usuarios registrados.</li>
+  <li>Un <strong>panel de administración</strong> exclusivo para administradores.</li>
+  <li>Una <strong>base de datos relacional</strong> (MariaDB) como capa de persistencia.</li>
+  <li>Un <strong>servidor web local</strong> (Laravel Herd o equivalente) como entorno de ejecución.</li>
+</ul>
+
+<div class="diagram">
+[Visitante / Cliente / Admin]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;[Navegador Web]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+[Laravel 13 — PHP 8.4]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[MariaDB]
+</div>
+
+<h2 class="subsection">2.2&nbsp;&nbsp;Funcionalidad del producto</h2>
+
+<p><strong>Para visitantes (sin autenticación):</strong></p>
+<ul>
+  <li>Navegar el catálogo con filtros por categoría, precio y talle.</li>
+  <li>Ver el detalle de cada producto.</li>
+  <li>Registrarse o iniciar sesión.</li>
+  <li>Recuperar contraseña por correo electrónico.</li>
+  <li>Enviar consultas a través del formulario de contacto.</li>
+</ul>
+
+<p><strong>Para clientes autenticados:</strong></p>
+<ul>
+  <li>Gestionar el carrito (agregar, modificar cantidad, eliminar ítems).</li>
+  <li>Realizar compras con cuatro métodos de pago: débito, crédito con cuotas, transferencia bancaria y MercadoPago.</li>
+  <li>Consultar historial de compras con filtros.</li>
+  <li>Ver y descargar la factura de cada pedido.</li>
+  <li>Suscribirse a notificaciones de reingreso de stock.</li>
+  <li>Editar datos personales.</li>
+</ul>
+
+<p><strong>Para administradores:</strong></p>
+<ul>
+  <li>Dashboard con métricas del sistema.</li>
+  <li>Gestión completa de productos (crear, editar, activar/inactivar, restaurar, eliminar definitivamente).</li>
+  <li>Gestión de usuarios con filtros, cambio de rol, activación/inactivación y edición de datos.</li>
+  <li>Seguimiento y actualización de estado de pedidos.</li>
+  <li>Configurar porcentajes de descuento y recargo por método de pago.</li>
+  <li>Ver el carrito actual de cualquier cliente.</li>
+</ul>
+
+<h2 class="subsection">2.3&nbsp;&nbsp;Características de los usuarios</h2>
+
+<table>
+  <tr><th>Tipo de usuario</th><th>Formación</th><th>Habilidades</th><th>Actividades principales</th></tr>
+  <tr><td>Visitante</td><td>Ninguna requerida</td><td>Uso básico de navegador</td><td>Explorar catálogo, registrarse</td></tr>
+  <tr><td>Cliente</td><td>Ninguna requerida</td><td>Uso básico de navegador y formularios</td><td>Comprar, ver historial, gestionar carrito</td></tr>
+  <tr><td>Administrador</td><td>Conocimientos básicos de administración web</td><td>Manejo de paneles de gestión</td><td>Gestionar productos, usuarios y pedidos</td></tr>
+</table>
+
+<h2 class="subsection">2.4&nbsp;&nbsp;Restricciones</h2>
+
+<ul>
+  <li>El sistema debe ejecutarse sobre <strong>PHP 8.4</strong> y <strong>Laravel 13</strong>.</li>
+  <li>La base de datos debe ser <strong>MariaDB</strong> (o MySQL compatible).</li>
+  <li>El entorno de desarrollo es local; no está previsto despliegue en producción en la nube.</li>
+  <li>Los pagos son <strong>simulados</strong>; no se integra con pasarelas reales.</li>
+  <li>El sistema usa <strong>soft delete</strong> para usuarios y productos.</li>
+  <li>La autenticación es exclusivamente por email y contraseña.</li>
+  <li>Las imágenes de productos se almacenan en el sistema de archivos local del servidor.</li>
+</ul>
+
+<h2 class="subsection">2.5&nbsp;&nbsp;Suposiciones y dependencias</h2>
+
+<ul>
+  <li>Se asume que cada instalador dispone de PHP 8.4, Composer y MariaDB operativos.</li>
+  <li>El archivo <code>.sql</code> de la base de datos debe importarse manualmente antes del primer uso.</li>
+  <li>El servidor de correo debe estar configurado en el <code>.env</code> para la recuperación de contraseña.</li>
+  <li>El sistema depende de Bootstrap 5 (CDN); requiere conexión a internet para cargarlo en desarrollo.</li>
+</ul>
+
+<h2 class="subsection">2.6&nbsp;&nbsp;Evolución previsible del sistema</h2>
+
+<ul>
+  <li>Integración con la API real de MercadoPago.</li>
+  <li>Sistema de reseñas y calificaciones de productos.</li>
+  <li>Envío de facturas por correo electrónico al cliente.</li>
+  <li>Módulo de reportes y estadísticas de ventas con gráficos.</li>
+  <li>Internacionalización (soporte multi-idioma).</li>
+  <li>Despliegue en servidor en la nube.</li>
+</ul>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECCIÓN 3 — REQUISITOS ESPECÍFICOS
+═══════════════════════════════════════════════════════════ -->
+<h1 class="section">3&nbsp;&nbsp;Requisitos específicos</h1>
+
+<p>Los requisitos se identifican con el formato <strong>RF-XX</strong> (funcionales) y <strong>RNF-XX</strong> (no funcionales). Para cada requisito se indica número, nombre, tipo, fuente, prioridad y descripción.</p>
+
+<h2 class="subsection">3.1&nbsp;&nbsp;Requisitos comunes de los interfaces</h2>
+
+<h3 class="subsubsection">3.1.1&nbsp;&nbsp;Interfaces de usuario</h3>
+<p>El sistema provee una interfaz web accesible desde cualquier navegador moderno, con diseño <strong>responsivo</strong> basado en Bootstrap 5:</p>
+<ul>
+  <li>En pantallas grandes (≥ 1200px): tablas de datos.</li>
+  <li>En pantallas pequeñas (&lt; 1200px): tarjetas (cards).</li>
+</ul>
+<p>Las acciones críticas (inactivar usuario, eliminar producto) requieren confirmación mediante modales.</p>
+
+<h3 class="subsubsection">3.1.2&nbsp;&nbsp;Interfaces de hardware</h3>
+<p>No se requiere hardware específico más allá de un equipo con procesador compatible con PHP 8.4, memoria RAM suficiente para un servidor web local y conexión de red local.</p>
+
+<h3 class="subsubsection">3.1.3&nbsp;&nbsp;Interfaces de software</h3>
+<table>
+  <tr><th>Software</th><th>Versión</th><th>Propósito</th></tr>
+  <tr><td>PHP</td><td>8.4</td><td>Lenguaje de programación del backend</td></tr>
+  <tr><td>Laravel</td><td>13</td><td>Framework principal</td></tr>
+  <tr><td>MariaDB</td><td>Compatible MySQL</td><td>Base de datos relacional</td></tr>
+  <tr><td>Composer</td><td>≥ 2.x</td><td>Gestor de dependencias PHP</td></tr>
+  <tr><td>Bootstrap</td><td>5 (CDN)</td><td>Framework CSS para la interfaz</td></tr>
+  <tr><td>Laravel Herd</td><td>Última</td><td>Servidor de desarrollo local</td></tr>
+</table>
+
+<h3 class="subsubsection">3.1.4&nbsp;&nbsp;Interfaces de comunicación</h3>
+<ul>
+  <li>Comunicación vía <strong>HTTP/HTTPS</strong> con rutas web de Laravel.</li>
+  <li>Formularios protegidos con tokens <strong>CSRF</strong>.</li>
+  <li>Envío de correos mediante el sistema de Mail de Laravel (SMTP configurable o driver <code>log</code>).</li>
+  <li>No se expone ninguna API REST pública en la versión actual.</li>
+</ul>
+
+<!-- ══ REQUISITOS FUNCIONALES ══ -->
+<h2 class="subsection">3.2&nbsp;&nbsp;Requisitos funcionales</h2>
+
+<!-- RF-01 -->
+<h3 class="subsubsection">RF-01 — Registro de usuario</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-01</td></tr>
+  <tr><th>Nombre de requisito</th><td>Registro de usuario</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Visitante</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir que un visitante cree una cuenta proporcionando nombre, email y contraseña. El email debe ser único en el sistema. La contraseña se almacena hasheada con bcrypt. Al registrarse, el usuario recibe el rol "cliente" automáticamente.</p>
+
+<!-- RF-02 -->
+<h3 class="subsubsection">RF-02 — Inicio de sesión</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-02</td></tr>
+  <tr><th>Nombre de requisito</th><td>Inicio de sesión</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente / Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe autenticar usuarios mediante email y contraseña. Si las credenciales son correctas, redirige al panel correspondiente según el rol (cliente → <code>/cliente</code>, admin → <code>/admin</code>). Si son incorrectas, muestra un mensaje de error sin revelar cuál campo falló.</p>
+
+<!-- RF-03 -->
+<h3 class="subsubsection">RF-03 — Recuperación de contraseña</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-03</td></tr>
+  <tr><th>Nombre de requisito</th><td>Recuperación de contraseña</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente / Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir restablecer la contraseña mediante un enlace enviado al email registrado. El enlace tiene vigencia limitada. El usuario puede ingresar y confirmar una nueva contraseña en <code>/reset-password/{token}</code>.</p>
+
+<!-- RF-04 -->
+<h3 class="subsubsection">RF-04 — Cierre de sesión</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-04</td></tr>
+  <tr><th>Nombre de requisito</th><td>Cierre de sesión</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente / Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al usuario autenticado cerrar su sesión desde cualquier página del sitio, invalidando la sesión activa.</p>
+
+<!-- RF-05 -->
+<h3 class="subsubsection">RF-05 — Catálogo de productos público</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-05</td></tr>
+  <tr><th>Nombre de requisito</th><td>Catálogo público de productos</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Visitante / Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe mostrar en la página principal (<code>/</code>) todos los productos activos con imagen, nombre, precio y categoría. Debe permitir filtrar por categoría (botas, sandalias, zapatos), precio mínimo, precio máximo y talle disponible, y ordenar por precio ascendente o descendente.</p>
+
+<!-- RF-06 -->
+<h3 class="subsubsection">RF-06 — Detalle de producto</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-06</td></tr>
+  <tr><th>Nombre de requisito</th><td>Vista de detalle de producto</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Visitante / Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe mostrar la información completa de un producto: nombre, descripción, categoría, precio, imagen y talles disponibles con su stock. Si un talle tiene stock 0, debe mostrarse como no disponible.</p>
+
+<!-- RF-07 -->
+<h3 class="subsubsection">RF-07 — Gestión del carrito de compras</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-07</td></tr>
+  <tr><th>Nombre de requisito</th><td>Carrito de compras</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al cliente autenticado:</p>
+<ul>
+  <li>Agregar un producto seleccionando talle y cantidad.</li>
+  <li>Ver el carrito con todos los ítems, precios unitarios y totales.</li>
+  <li>Modificar la cantidad de un ítem.</li>
+  <li>Eliminar un ítem del carrito.</li>
+  <li>Ver el subtotal actualizado.</li>
+</ul>
+
+<!-- RF-08 -->
+<h3 class="subsubsection">RF-08 — Proceso de pago</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-08</td></tr>
+  <tr><th>Nombre de requisito</th><td>Proceso de pago</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al cliente confirmar la compra seleccionando un método de pago:</p>
+<ul>
+  <li><strong>Débito:</strong> número de tarjeta (16 dígitos), nombre del titular, fecha de vencimiento y CVV.</li>
+  <li><strong>Crédito:</strong> ídem débito, más selección de cuotas (3, 6, 9 o 12). Aplica recargo configurable.</li>
+  <li><strong>Transferencia bancaria:</strong> número de operación de 6 dígitos.</li>
+  <li><strong>MercadoPago:</strong> número de operación de 6 dígitos. Aplica descuento configurable.</li>
+</ul>
+<p>El sistema debe validar que la tarjeta no esté vencida. El pago se procesa en una transacción de base de datos con bloqueo de fila (<code>lockForUpdate</code>) que verifica y descuenta el stock. Si el stock es insuficiente, se cancela la operación y se informa al cliente.</p>
+
+<!-- RF-09 -->
+<h3 class="subsubsection">RF-09 — Generación de factura</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-09</td></tr>
+  <tr><th>Nombre de requisito</th><td>Factura de compra</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>Al confirmar el pago, el sistema debe generar un pedido con número de factura único (formato <code>FAC-XXXXXXXX</code>) y redirigir al cliente a la vista de factura, mostrando: ítems comprados, subtotal, descuento o recargo aplicado y total final.</p>
+
+<!-- RF-10 -->
+<h3 class="subsubsection">RF-10 — Historial de compras</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-10</td></tr>
+  <tr><th>Nombre de requisito</th><td>Historial de compras del cliente</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al cliente ver todos sus pedidos ordenados por fecha descendente, con filtros por método de pago, estado y rango de fechas. Desde el historial debe acceder a la factura de cada pedido.</p>
+
+<!-- RF-11 -->
+<h3 class="subsubsection">RF-11 — Notificación de reingreso de stock</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-11</td></tr>
+  <tr><th>Nombre de requisito</th><td>Suscripción a notificación de stock</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-media">Media / Deseado</span></td></tr>
+</table>
+<p>El sistema debe permitir al cliente suscribirse para recibir una notificación cuando un producto sin stock vuelva a estar disponible. La notificación se envía automáticamente al reingresarse stock del producto. El cliente puede ver sus notificaciones en <code>/notificaciones</code>.</p>
+
+<!-- RF-12 -->
+<h3 class="subsubsection">RF-12 — Edición de perfil del cliente</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-12</td></tr>
+  <tr><th>Nombre de requisito</th><td>Edición de perfil</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Cliente</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-media">Media / Deseado</span></td></tr>
+</table>
+<p>El sistema debe permitir al cliente actualizar su nombre, email, teléfono, dirección y ciudad desde su panel personal.</p>
+
+<!-- RF-13 -->
+<h3 class="subsubsection">RF-13 — Formulario de contacto</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-13</td></tr>
+  <tr><th>Nombre de requisito</th><td>Consultas / contacto</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Visitante</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-media">Media / Deseado</span></td></tr>
+</table>
+<p>El sistema debe permitir a cualquier visitante enviar una consulta a través del formulario en <code>/contacto</code>. Las consultas se almacenan en la tabla <code>consultas</code>.</p>
+
+<!-- RF-14 -->
+<h3 class="subsubsection">RF-14 — Dashboard de administración</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-14</td></tr>
+  <tr><th>Nombre de requisito</th><td>Dashboard del administrador</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe mostrar al administrador en <code>/admin</code> un panel con: cantidad total de productos, cantidad de usuarios activos y cantidad de usuarios inactivos.</p>
+
+<!-- RF-15 -->
+<h3 class="subsubsection">RF-15 — Gestión de productos (admin)</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-15</td></tr>
+  <tr><th>Nombre de requisito</th><td>ABM de productos</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al administrador:</p>
+<ul>
+  <li><strong>Crear</strong> un producto con nombre, descripción, categoría, precio de venta, precio de compra, stock mínimo, descuento propio e imagen.</li>
+  <li><strong>Editar</strong> todos los campos de un producto existente.</li>
+  <li><strong>Inactivar</strong> un producto (soft delete): deja de mostrarse en el catálogo público.</li>
+  <li><strong>Restaurar</strong> un producto inactivo.</li>
+  <li><strong>Eliminar definitivamente</strong> un producto (force delete).</li>
+  <li>Gestionar los talles y el stock por talle de cada producto.</li>
+</ul>
+
+<!-- RF-16 -->
+<h3 class="subsubsection">RF-16 — Gestión de usuarios (admin)</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-16</td></tr>
+  <tr><th>Nombre de requisito</th><td>Gestión de usuarios</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al administrador:</p>
+<ul>
+  <li>Listar todos los usuarios (activos e inactivos) con filtros por nombre/email, rol y estado.</li>
+  <li>Cambiar el rol de un usuario (con confirmación).</li>
+  <li><strong>Inactivar</strong> un usuario (soft delete). Si el usuario tiene rol admin, se requiere confirmación con contraseña del administrador.</li>
+  <li><strong>Activar</strong> un usuario inactivo.</li>
+  <li>Editar los datos personales de un usuario.</li>
+  <li>Ver el contenido del carrito de un usuario.</li>
+</ul>
+
+<!-- RF-17 -->
+<h3 class="subsubsection">RF-17 — Gestión de pedidos (admin)</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-17</td></tr>
+  <tr><th>Nombre de requisito</th><td>Seguimiento de pedidos</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al administrador ver todos los pedidos con filtros por nombre de cliente, método de pago, estado, rango de fechas y rango de total. Debe poder cambiar el estado de cada pedido.</p>
+
+<!-- RF-18 -->
+<h3 class="subsubsection">RF-18 — Configuración de precios por método de pago</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RF-18</td></tr>
+  <tr><th>Nombre de requisito</th><td>Configuración de descuentos y recargos</td></tr>
+  <tr><th>Tipo</th><td>Requisito</td></tr>
+  <tr><th>Fuente del requisito</th><td>Admin</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El sistema debe permitir al administrador configurar los porcentajes de descuento o recargo aplicables a cada método de pago (débito, crédito por cantidad de cuotas, transferencia, MercadoPago). Estos valores se aplican automáticamente al calcular el total de cada compra.</p>
+
+<!-- ══ REQUISITOS NO FUNCIONALES ══ -->
+<h2 class="subsection">3.3&nbsp;&nbsp;Requisitos no funcionales</h2>
+
+<h3 class="subsubsection">3.3.1&nbsp;&nbsp;Requisitos de rendimiento</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RNF-01</td></tr>
+  <tr><th>Nombre de requisito</th><td>Rendimiento de respuesta</td></tr>
+  <tr><th>Tipo</th><td>Restricción</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-media">Media / Deseado</span></td></tr>
+</table>
+<p>El sistema debe responder a las solicitudes del usuario en menos de 3 segundos en condiciones normales de uso (entorno local, un usuario concurrente). Las consultas a la base de datos deben estar optimizadas mediante eager loading (<code>with()</code>) de Eloquent.</p>
+
+<h3 class="subsubsection">3.3.2&nbsp;&nbsp;Seguridad</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RNF-02</td></tr>
+  <tr><th>Nombre de requisito</th><td>Seguridad del sistema</td></tr>
+  <tr><th>Tipo</th><td>Restricción</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<ul>
+  <li>Las contraseñas se almacenan con hash <strong>bcrypt</strong>.</li>
+  <li>Todos los formularios están protegidos con tokens <strong>CSRF</strong>.</li>
+  <li>El acceso al panel de administración está restringido por rol; sin autorización devuelve HTTP 403.</li>
+  <li>Las rutas de cliente están protegidas con el middleware <code>auth</code>.</li>
+  <li>Los datos de tarjeta no se almacenan en la base de datos.</li>
+  <li>Las transacciones de compra usan <code>lockForUpdate</code> para evitar condiciones de carrera en el stock.</li>
+  <li>La inactivación de un usuario admin requiere verificación adicional de contraseña.</li>
+</ul>
+
+<h3 class="subsubsection">3.3.3&nbsp;&nbsp;Fiabilidad</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RNF-03</td></tr>
+  <tr><th>Nombre de requisito</th><td>Fiabilidad en el proceso de compra</td></tr>
+  <tr><th>Tipo</th><td>Restricción</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-alta">Alta / Esencial</span></td></tr>
+</table>
+<p>El proceso de compra se ejecuta dentro de una transacción de base de datos (<code>DB::transaction</code>). Si ocurre cualquier error (stock insuficiente, fallo de escritura), la transacción se revierte completamente, garantizando la integridad de los datos.</p>
+
+<h3 class="subsubsection">3.3.4&nbsp;&nbsp;Disponibilidad</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RNF-04</td></tr>
+  <tr><th>Nombre de requisito</th><td>Disponibilidad en entorno local</td></tr>
+  <tr><th>Tipo</th><td>Restricción</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-media">Media / Deseado</span></td></tr>
+</table>
+<p>El sistema debe estar disponible durante el horario de uso académico y de evaluación. Al tratarse de un entorno local, la disponibilidad depende del equipo del desarrollador. No se define un SLA de uptime para esta etapa del proyecto.</p>
+
+<h3 class="subsubsection">3.3.5&nbsp;&nbsp;Mantenibilidad</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RNF-05</td></tr>
+  <tr><th>Nombre de requisito</th><td>Mantenibilidad del código</td></tr>
+  <tr><th>Tipo</th><td>Restricción</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-media">Media / Deseado</span></td></tr>
+</table>
+<ul>
+  <li>El sistema sigue la arquitectura <strong>MVC</strong> de Laravel.</li>
+  <li>La lógica de configuración de precios está centralizada en <code>ConfiguracionService</code>.</li>
+  <li>El uso de soft deletes permite recuperar datos sin intervención directa en la base de datos.</li>
+</ul>
+
+<h3 class="subsubsection">3.3.6&nbsp;&nbsp;Portabilidad</h3>
+<table class="req-table">
+  <tr><th>Número de requisito</th><td>RNF-06</td></tr>
+  <tr><th>Nombre de requisito</th><td>Portabilidad del entorno de desarrollo</td></tr>
+  <tr><th>Tipo</th><td>Restricción</td></tr>
+  <tr><th>Prioridad del requisito</th><td><span class="prio-media">Media / Deseado</span></td></tr>
+</table>
+<ul>
+  <li>El sistema puede ejecutarse en Windows, macOS o Linux con PHP 8.4 y MariaDB.</li>
+  <li>Las dependencias se gestionan exclusivamente mediante <strong>Composer</strong>.</li>
+  <li>La configuración del entorno está aislada en el archivo <code>.env</code>.</li>
+</ul>
+
+<h2 class="subsection">3.4&nbsp;&nbsp;Otros requisitos</h2>
+
+<p><strong>Requisitos de interfaz visual:</strong> coherencia Bootstrap 5 en todas las vistas (frontend y panel de administración).</p>
+<p><strong>Requisitos de datos iniciales:</strong> el sistema requiere importar <code>grupo9.sql</code> antes del primer uso.</p>
+<p><strong>Requisitos de accesibilidad:</strong> las páginas deben funcionar en Chrome, Firefox, Edge y Safari (versiones actuales).</p>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECCIÓN 4 — APÉNDICES
+═══════════════════════════════════════════════════════════ -->
+<h1 class="section">4&nbsp;&nbsp;Apéndices</h1>
+
+<h2 class="subsection">Apéndice A — Modelo de datos (entidades principales)</h2>
+
+<table>
+  <tr><th>Entidad</th><th>Campos principales</th></tr>
+  <tr><td><code>usuarios</code></td><td>id, nombre, email, password, rol_id, telefono, direccion, ciudad, deleted_at</td></tr>
+  <tr><td><code>roles</code></td><td>id, nombre</td></tr>
+  <tr><td><code>productos</code></td><td>id, nombre, descripcion, categoria, precio_venta, precio_compra, stock, stock_minimo, descuento, imagen, deleted_at</td></tr>
+  <tr><td><code>producto_talles</code></td><td>id, producto_id, talle, stock</td></tr>
+  <tr><td><code>carritos</code></td><td>id, usuario_id, producto_id, talle, cantidad, precio_unitario, total</td></tr>
+  <tr><td><code>pedidos</code></td><td>id, usuario_id, subtotal, total, descuento, recargo, metodo_pago, cuotas, estado, numero_factura</td></tr>
+  <tr><td><code>pedido_items</code></td><td>id, pedido_id, producto_id, talle, cantidad, precio_unitario, total</td></tr>
+  <tr><td><code>notificacion_reingresos</code></td><td>id, usuario_id, producto_id, deleted_at</td></tr>
+  <tr><td><code>configuraciones</code></td><td>id, clave, valor</td></tr>
+  <tr><td><code>consultas</code></td><td>id, datos del formulario de contacto</td></tr>
+</table>
+
+<h2 class="subsection">Apéndice B — Roles y permisos</h2>
+
+<table>
+  <tr><th>Acción</th><th>Visitante</th><th>Cliente</th><th>Admin</th></tr>
+  <tr><td>Ver catálogo</td><td>✅</td><td>✅</td><td>✅</td></tr>
+  <tr><td>Ver detalle de producto</td><td>✅</td><td>✅</td><td>✅</td></tr>
+  <tr><td>Registrarse / iniciar sesión</td><td>✅</td><td>—</td><td>—</td></tr>
+  <tr><td>Gestionar carrito</td><td>❌</td><td>✅</td><td>❌</td></tr>
+  <tr><td>Realizar compra</td><td>❌</td><td>✅</td><td>❌</td></tr>
+  <tr><td>Ver historial de compras</td><td>❌</td><td>✅</td><td>❌</td></tr>
+  <tr><td>Editar perfil</td><td>❌</td><td>✅</td><td>✅</td></tr>
+  <tr><td>Suscribirse a notificaciones</td><td>❌</td><td>✅</td><td>❌</td></tr>
+  <tr><td>Gestionar productos</td><td>❌</td><td>❌</td><td>✅</td></tr>
+  <tr><td>Gestionar usuarios</td><td>❌</td><td>❌</td><td>✅</td></tr>
+  <tr><td>Ver y gestionar pedidos</td><td>❌</td><td>❌</td><td>✅</td></tr>
+  <tr><td>Configurar precios</td><td>❌</td><td>❌</td><td>✅</td></tr>
+  <tr><td>Ver dashboard</td><td>❌</td><td>❌</td><td>✅</td></tr>
+</table>
+
+<h2 class="subsection">Apéndice C — Métodos de pago y validaciones</h2>
+
+<table>
+  <tr><th>Método</th><th>Campos requeridos</th><th>Lógica adicional</th></tr>
+  <tr><td>Débito</td><td>número tarjeta (16 dígitos), titular, vencimiento, CVV</td><td>Tarjeta no debe estar vencida</td></tr>
+  <tr><td>Crédito</td><td>ídem débito + cuotas (3/6/9/12)</td><td>Aplica recargo según cuotas (configurable)</td></tr>
+  <tr><td>Transferencia</td><td>número de operación (6 dígitos)</td><td>Sin validación adicional</td></tr>
+  <tr><td>MercadoPago</td><td>número de operación (6 dígitos)</td><td>Aplica descuento (configurable)</td></tr>
+</table>
+
+<div class="page-footer">
+  Step &amp; Style — Grupo 9 — Especificación de Requisitos de Software — Rev. 1.0 — Junio 2026
+</div>
+
+</body>
+</html>
