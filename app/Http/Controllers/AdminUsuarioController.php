@@ -9,18 +9,11 @@ use Illuminate\Http\Request;
 
 class AdminUsuarioController extends Controller
 {
-    private function ensureAdmin()
-    {
-        if (auth()->user()->rol?->nombre !== 'admin') {
-            abort(403, 'No autorizado.');
-        }
-    }
-
     public function index(Request $request)
     {
-        $this->ensureAdmin();
-
-        $query = Usuario::withTrashed()->with('rol');
+        $query = Usuario::withTrashed()
+            ->with('rol')
+            ->withCount(['carrito as carritoCount']);
 
         if ($request->filled('buscar')) {
             $query->buscaPorNombreOEmail($request->buscar);
@@ -38,20 +31,13 @@ class AdminUsuarioController extends Controller
             }
         }
 
-        $usuarios = $query->get()->map(function ($usuario) {
-            $usuario->carritoCount = Carrito::where('usuario_id', $usuario->id)->count();
-            return $usuario;
-        });
-
+        $usuarios = $query->paginate(15)->withQueryString();
         $roles = Rol::all();
-    return view('backend.usuarios.index', compact('usuarios', 'roles'));
-}
+        return view('backend.usuarios.index', compact('usuarios', 'roles'));
+    }
 
     public function verCarrito($usuarioId)
     {
-        $this->ensureAdmin();
-
-        // El admin puede ver qué productos tiene en carrito cada usuario.
         $usuario = Usuario::withTrashed()->findOrFail($usuarioId);
         $items = Carrito::where('usuario_id', $usuarioId)->with('producto')->get();
         $total = $items->sum('total');
@@ -61,8 +47,6 @@ class AdminUsuarioController extends Controller
 
     public function actualizarRol(Request $request, $id)
     {
-        $this->ensureAdmin();
-
         $request->validate([
             'rol_id' => 'required|exists:roles,id',
         ]);
@@ -77,8 +61,6 @@ class AdminUsuarioController extends Controller
 
     public function inactivar($id)
     {
-        $this->ensureAdmin();
-
         Usuario::findOrFail($id)->delete();
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario inactivado correctamente.');
@@ -86,28 +68,25 @@ class AdminUsuarioController extends Controller
 
     public function activar($id)
     {
-        $this->ensureAdmin();
-
         Usuario::withTrashed()->findOrFail($id)->restore();
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario activado correctamente.');
     }
+
     public function editar(Request $request, $id)
-{
-    $this->ensureAdmin();
+    {
+        $request->validate([
+            'nombre'    => 'required|string|max:255',
+            'email'     => 'required|email|max:255',
+            'telefono'  => 'nullable|string|max:50',
+            'direccion' => 'nullable|string|max:255',
+            'ciudad'    => 'nullable|string|max:100',
+        ]);
 
-    $request->validate([
-        'nombre'    => 'required|string|max:255',
-        'email'     => 'required|email|max:255',
-        'telefono'  => 'nullable|string|max:50',
-        'direccion' => 'nullable|string|max:255',
-        'ciudad'    => 'nullable|string|max:100',
-    ]);
+        $usuario = Usuario::withTrashed()->findOrFail($id);
+        $usuario->update($request->only(['nombre', 'email', 'telefono', 'direccion', 'ciudad']));
 
-    $usuario = Usuario::withTrashed()->findOrFail($id);
-    $usuario->update($request->only(['nombre', 'email', 'telefono', 'direccion', 'ciudad']));
-
-    return redirect()->route('admin.usuarios.index')
-                     ->with('mensaje', 'Datos del usuario actualizados correctamente.');
-}
+        return redirect()->route('admin.usuarios.index')
+            ->with('mensaje', 'Datos del usuario actualizados correctamente.');
+    }
 }

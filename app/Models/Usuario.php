@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Carrito;
 use App\Models\NotificacionReingreso;
 use App\Traits\BuscaGlobal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,6 +48,11 @@ class Usuario extends Authenticatable implements CanResetPasswordContract
     public function rol()
     {
         return $this->belongsTo(Rol::class, 'rol_id');
+    }
+
+    public function carrito()
+    {
+        return $this->hasMany(Carrito::class);
     }
 
     public function notificaciones()

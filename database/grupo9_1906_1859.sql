@@ -232,13 +232,13 @@ CREATE TABLE IF NOT EXISTS `pedidos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `pedidos` (`id`, `usuario_id`, `subtotal`, `total`, `descuento`, `recargo`, `metodo_pago`, `cuotas`, `estado`, `numero_factura`, `created_at`, `updated_at`) VALUES
-	(1, 4, 175500.00, 157950.00, 17550.00, 0.00, 'transferencia', NULL, 'finalizada', 'FAC-6A35A7E0D3A8B', '2026-06-19 23:34:40', '2026-06-19 23:34:40'),
-	(2, 4, 78000.00, 81900.00, 0.00, 3900.00, 'credito', 3, 'finalizada', 'FAC-6A35A860CC231', '2026-06-19 23:36:48', '2026-06-19 23:36:48'),
-	(3, 7, 117000.00, 117000.00, 0.00, 0.00, 'mercadopago', NULL, 'finalizada', 'FAC-6A35A91A047FF', '2026-06-19 23:39:54', '2026-06-19 23:39:54'),
-	(4, 7, 65000.00, 58500.00, 6500.00, 0.00, 'transferencia', NULL, 'finalizada', 'FAC-6A35AE0D81BD7', '2026-06-20 00:01:01', '2026-06-20 00:01:01'),
-	(5, 4, 91000.00, 91000.00, 0.00, 0.00, 'mercadopago', NULL, 'finalizada', 'FAC-6A35B01D3F5D1', '2026-06-20 00:09:49', '2026-06-20 00:09:49'),
-	(6, 4, 104000.00, 93600.00, 10400.00, 0.00, 'transferencia', NULL, 'finalizada', 'FAC-6A35B3D270860', '2026-06-20 00:25:38', '2026-06-20 00:25:38'),
-	(7, 7, 104000.00, 104000.00, 0.00, 0.00, 'mercadopago', NULL, 'finalizada', 'FAC-6A35BA84A66CA', '2026-06-20 00:54:12', '2026-06-20 00:54:12');
+	(1, 4, 175500.00, 157950.00, 17550.00, 0.00, 'transferencia', NULL, 'finalizado', 'FAC-6A35A7E0D3A8B', '2026-06-19 23:34:40', '2026-06-19 23:34:40'),
+	(2, 4, 78000.00, 81900.00, 0.00, 3900.00, 'credito', 3, 'finalizado', 'FAC-6A35A860CC231', '2026-06-19 23:36:48', '2026-06-19 23:36:48'),
+	(3, 7, 117000.00, 117000.00, 0.00, 0.00, 'mercadopago', NULL, 'finalizado', 'FAC-6A35A91A047FF', '2026-06-19 23:39:54', '2026-06-19 23:39:54'),
+	(4, 7, 65000.00, 58500.00, 6500.00, 0.00, 'transferencia', NULL, 'finalizado', 'FAC-6A35AE0D81BD7', '2026-06-20 00:01:01', '2026-06-20 00:01:01'),
+	(5, 4, 91000.00, 91000.00, 0.00, 0.00, 'mercadopago', NULL, 'finalizado', 'FAC-6A35B01D3F5D1', '2026-06-20 00:09:49', '2026-06-20 00:09:49'),
+	(6, 4, 104000.00, 93600.00, 10400.00, 0.00, 'transferencia', NULL, 'finalizado', 'FAC-6A35B3D270860', '2026-06-20 00:25:38', '2026-06-20 00:25:38'),
+	(7, 7, 104000.00, 104000.00, 0.00, 0.00, 'mercadopago', NULL, 'finalizado', 'FAC-6A35BA84A66CA', '2026-06-20 00:54:12', '2026-06-20 00:54:12');
 
 CREATE TABLE IF NOT EXISTS `producto_talles` (
   `producto_id` bigint(20) unsigned NOT NULL,

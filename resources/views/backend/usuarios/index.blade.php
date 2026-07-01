@@ -16,57 +16,6 @@
     <form method="GET" action="{{ route('admin.usuarios.index') }}" class="row g-2 mb-4">
         <div class="col-12 col-md-4">
             <input type="text"
-                   name="buscar"
-                   class="form-control"
-                   placeholder="Buscar por nombre o email..."
-                   value="{{ request('buscar') }}">
-        </div>
-        <div class="col-6 col-md-3">
-            <select name="rol" class="form-select">
-                <option value="">Todos los roles</option>
-                @foreach($roles as $rol)
-                    <option value="{{ $rol->nombre }}" {{ request('rol') === $rol->nombre ? 'selected' : '' }}>
-                        {{ ucfirst($rol->nombre) }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-6 col-md-3">
-            <select name="estado" class="form-select">
-                <option value="">Todos los estados</option>
-                <option value="activo"   {{ request('estado') === 'activo'   ? 'selected' : '' }}>Activo</option>
-                <option value="inactivo" {{ request('estado') === 'inactivo' ? 'selected' : '' }}>Inactivo</option>
-            </select>
-        </div>
-        <div class="col-6 col-md-1">
-            <button type="submit" class="btn btn-dark w-100">
-                <i class="bi bi-search"></i>
-            </button>
-        </div>
-        <div class="col-6 col-md-1">
-            <a href="{{ route('admin.usuarios.index') }}" class="btn btn-outline-secondary w-100">
-                <i class="bi bi-x-lg"></i>
-            </a>
-        </div>
-    </form>
-
-    {{-- ═══════════════════════════════════════════ --}}
-    {{-- TABLA — solo visible en pantallas grandes   --}}
-    {{-- ═══════════════════════════════════════════ --}}
-    <div class="d-none d-xl-block">
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Ciudad</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Carrito</th>
-                    <th>Acciones</th>
-                </tr>
             </thead>
             <tbody>
                 @forelse($usuarios as $usuario)
@@ -439,5 +388,11 @@ document.querySelectorAll('.btn-editar').forEach(btn => {
     });
 });
 </script>
+
+@if($usuarios->hasPages())
+    <div class="d-flex justify-content-center mt-4">
+        {{ $usuarios->links() }}
+    </div>
+@endif
 
 @endsection

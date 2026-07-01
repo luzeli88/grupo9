@@ -2,12 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductoRequest;
 use App\Models\Producto;
 use App\Models\ProductoTalle;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
+    public function categorias(Request $request)
+    {
+        $query = Producto::with('talles');
+
+        if ($request->filled('categoria')) {
+            $query->where('categoria', $request->categoria);
+        }
+
+        if ($request->filled('precio_min')) {
+            $query->where('precio_venta', '>=', $request->precio_min);
+        }
+
+        if ($request->filled('precio_max')) {
+            $query->where('precio_venta', '<=', $request->precio_max);
+        }
+
+        if ($request->filled('talle')) {
+            $query->whereHas('talles', function ($q) use ($request) {
+                $q->where('talle', $request->talle)->where('stock', '>', 0);
+            });
+        }
+
+        if ($request->orden === 'asc') {
+            $query->orderBy('precio_venta');
+        } elseif ($request->orden === 'desc') {
+            $query->orderByDesc('precio_venta');
+        }
+
+        $productos = $query->get();
+        return view('categorias', [
+            'productos' => $productos,
+            'categoria' => $request->categoria,
+        ]);
+    }
+
     public function index(Request $request)
     {
         $query = Producto::withTrashed()->with('talles');
@@ -52,20 +88,8 @@ class ProductoController extends Controller
         return view('backend.productos.create');
     }
 
-    public function store(Request $request)
+    public function store(ProductoRequest $request)
     {
-        // Validación del producto, incluyendo tipo y tamaño de imagen.
-        $request->validate([
-            'nombre'        => 'required|string|max:255',
-            'categoria'     => 'required|string',
-            'precio_venta'  => 'required|numeric',
-            'precio_compra' => 'nullable|numeric',
-            'stock'         => 'nullable|integer',
-            'stock_minimo'  => 'nullable|integer',
-            'descuento'     => 'nullable|numeric',
-            'imagen'        => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
-
         // Solo procesamos los campos esperados del formulario.
         $datos = $request->only([
             'nombre', 'descripcion', 'categoria',
@@ -110,18 +134,8 @@ class ProductoController extends Controller
         return view('backend.productos.edit', compact('producto', 'talles'));
     }
 
-    public function update(Request $request, Producto $producto)
-{
-    $request->validate([
-        'nombre'        => 'required|string|max:255',
-        'categoria'     => 'required|string',
-        'precio_venta'  => 'required|numeric',
-        'precio_compra' => 'nullable|numeric',
-        'stock'         => 'nullable|integer',
-        'stock_minimo'  => 'nullable|integer',
-        'descuento'     => 'nullable|numeric',
-        'imagen'        => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-    ]);
+    public function update(ProductoRequest $request, Producto $producto)
+    {
 
     $datos = $request->only([
         'nombre', 'descripcion', 'categoria',
@@ -184,14 +198,14 @@ class ProductoController extends Controller
             ->with('mensaje', 'Producto inactivado correctamente.');
     }
 
-    public function restore($id)
+    public function restore(int $id)
     {
         Producto::withTrashed()->findOrFail($id)->restore();
         return redirect()->route('productos.index')
             ->with('mensaje', 'Producto activado correctamente.');
     }
 
-    public function forceDelete($id)
+    public function forceDelete(int $id)
     {
         Producto::withTrashed()->findOrFail($id)->forceDelete();
         return redirect()->route('productos.index')

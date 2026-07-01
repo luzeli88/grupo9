@@ -37,8 +37,8 @@ class PagoController extends Controller
             'comprobante' => 'required_if:metodo,transferencia,mercadopago|nullable|digits:6',
         ], [
             'numero_tarjeta.digits' => 'El número de tarjeta debe tener 16 números.',
-            'comprobante.digits' => 'El número de operación debe tener 6 números.',
-            'vencimiento.regex' => 'El vencimiento debe tener formato MM/AA o seleccionarse desde el calendario.',
+            'comprobante.digits'    => 'El número de operación debe tener 6 números.',
+            'vencimiento.regex'     => 'El vencimiento debe tener formato MM/AA.',
         ]);
 
         // Validar vencimiento de tarjeta
@@ -59,9 +59,7 @@ class PagoController extends Controller
             if ($vencimiento->lt(now()->startOfDay())) {
                 return redirect()
                     ->back()
-                    ->withErrors([
-                        'vencimiento' => 'La tarjeta está vencida.'
-                    ])
+                    ->withErrors(['vencimiento' => 'La tarjeta está vencida.'])
                     ->withInput();
             }
         }
@@ -115,7 +113,7 @@ class PagoController extends Controller
                 'cuotas'         => $request->metodo === 'credito'
                     ? (int) $request->cuotas
                     : null,
-                'estado'         => 'finalizada',
+                'estado'         => 'pendiente',
                 'numero_factura' => $numeroFactura,
             ]);
 
@@ -153,9 +151,9 @@ class PagoController extends Controller
 
                 $stockNuevo = $productoTalle->stock - $item->cantidad;
 
-                $productoTalle->update([
-                    'stock' => $stockNuevo
-                ]);
+                ProductoTalle::where('producto_id', $item->producto_id)
+                    ->where('talle', $item->talle)
+                    ->update(['stock' => $stockNuevo]);
 
                 $producto = Producto::find($item->producto_id);
 
@@ -184,14 +182,15 @@ class PagoController extends Controller
 
     } catch (ValidationException $exception) {
 
-        $errores = $exception->errors();
-
-        $mensaje = $errores['stock'][0]
+        $mensaje = $exception->errors()['stock'][0]
             ?? 'No hay stock suficiente para completar la compra.';
 
-        return redirect()
-            ->route('carrito')
-            ->with('error', $mensaje);
+        return redirect()->route('carrito')->with('error', $mensaje);
+
+    } catch (\Exception $exception) {
+
+        return redirect()->route('carrito')
+            ->with('error', 'Ocurrió un error al procesar el pago. Por favor intentá de nuevo.');
     }
 
     return redirect()
